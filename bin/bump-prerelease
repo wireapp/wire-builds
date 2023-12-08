@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+#
+# Usage: ./bin/bump-prerelease.sh
+#
+# Prints build.json with "version" field modified to stdout
+# The prerelease part of the SemVer of "version" is bumped
+#
+# Requires jq
+
+version=$(jq -Mr '.version' ./build.json)
+version_bumped=$(./bin/semver bump prerelease "$version")
+jq -Mr ".version = \"$version_bumped\"" ./build.json
