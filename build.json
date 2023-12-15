@@ -1,13 +1,129 @@
 {
-  "version": "1.0.0-zulu.16",
+  "version": "1.0.0-zulu.17",
   "helmCharts": {
     "wire-server": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "0.0.0"
+      "repo": "wire-develop",
+      "version": "4.39.81"
     },
     "webapp": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
       "version": "0.5.0-pre.5"
+    },
+    "aws-ingress": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "backoffice": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "calling-test": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "cassandra-external": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "coturn": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "databases-ephemeral": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "demo-smtp": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "elasticsearch-curator": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "elasticsearch-ephemeral": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "elasticsearch-external": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "fake-aws": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "fake-aws-s3": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "fake-aws-sqs": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "fluent-bit": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "inbucket": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "ingress-nginx-controller": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "k8ssandra-test-cluster": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "kibana": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "minio-external": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "nginx-ingress-controller": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "nginx-ingress-services": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "postgresql": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "rabbitmq": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "rabbitmq-external": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "reaper": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "redis-cluster": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "redis-ephemeral": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "restund": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
+    },
+    "sftd": {
+      "repo": "wire-develop",
+      "version": "4.39.81"
     }
   }
 }
