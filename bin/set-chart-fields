@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+#
+# Usage: cat ./build.json | ./bin/set-chart-fields <CHART_NAME> [key=val] ...
+#
+# where key are "version", "repo" or "meta.<name>" to freely set fields in .meta
+#
+# Bumps helm chart version in ./build.json
+#
+# Example: cat ./build.json | ./bin/set-chart-fields webapp version=2.0.0 meta.appVersion=4.15.1-v0.31.19-0557ed8 meta.commit=ed8999f8daa5b8f4fc479967e39d2713a944
+#
+# Requires jq
+
+
+export CHART_NAME=${1:?"Please provide an CHART_NAME argument"}
+
+args=( "${@:2}" )
+
+
+build_json=$(</dev/stdin)
+a="$build_json"
+
+meta_args=()
+for x in "${args[@]}"; do
+  if [[ $x = meta.* ]]; then
+    meta_args+=("${x:5}")
+  else
+    IFS='=' read -r key val <<< "$x"
+    a=$(jq -Mr ".helmCharts[\"$CHART_NAME\"][\"$key\"] = \"$val\"" <<< "$a")
+  fi
+done
+
+a=$(jq -Mr "del(.helmCharts[\"$CHART_NAME\"].meta)" <<< "$a")
+if [ ${#meta_args[@]} -gt 0 ]; then
+  a=$(jq -Mr ".helmCharts[\"$CHART_NAME\"].meta = {}" <<< "$a")
+  for x in "${meta_args[@]}"; do
+      IFS='=' read -r key val <<< "$x"
+      a=$(jq -Mr ".helmCharts[\"$CHART_NAME\"].meta[\"$key\"] = \"$val\"" <<< "$a")
+  done
+fi
+
+echo "$a"
