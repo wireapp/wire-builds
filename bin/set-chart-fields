@@ -20,6 +20,11 @@ args=( "${@:2}" )
 build_json=$(</dev/stdin)
 a="$build_json"
 
+has_chart=$(jq -Mr ".helmCharts[\"$CHART_NAME\"] != null" <<< "$a")
+if [ "$has_chart" == "false" ]; then
+  a=$(jq -Mr ".helmCharts[\"$CHART_NAME\"] = { repo: null, version: null }" <<< "$a")
+fi
+
 meta_args=()
 for x in "${args[@]}"; do
   if [[ $x = meta.* ]]; then
