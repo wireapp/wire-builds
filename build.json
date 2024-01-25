@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-q1-2024.4",
+  "version": "1.0.0-q1-2024.5",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -281,6 +281,15 @@
         "appVersion": "4.40.0-pre.7",
         "commit": "6f2c9144f6402f4b7ed7021d6c9683f278546b81",
         "commitURL": "https://github.com/wireapp/wire-server/commit/6f2c9144f6402f4b7ed7021d6c9683f278546b81"
+      }
+    },
+    "account-pages": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
+      "version": "0.1.0-pre.10",
+      "meta": {
+        "appVersion": "2.5.0-v0.31.15-f11cc5c",
+        "commitURL": "https://github.com/wireapp/wire-account/commit/f11cc5c9ae1c04ed820567c7110a672a10db36d1",
+        "commit": "f11cc5c9ae1c04ed820567c7110a672a10db36d1"
       }
     }
   }
