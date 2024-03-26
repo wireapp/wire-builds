@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-q1-2024.165",
+  "version": "1.0.0-q1-2024.166",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -29,10 +29,10 @@
     },
     "sftd": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-avs",
-      "version": "0.22.0",
+      "version": "0.23.0",
       "meta": {
-        "appVersion": "4.1.2",
-        "commit": "1645c85"
+        "appVersion": "4.0.22",
+        "commit": "57015eb"
       }
     },
     "aws-ingress": {
