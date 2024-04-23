@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+#
+# Usage: cat ./build.json | ./bin/bump-chart <CHART_NAME> <VERSION>
+#
+# Bumps helm chart version in ./build.json
+#
+# Example: cat ./build.json | ./bin/bump-chart webapp 2.0.0
+#
+# Requires jq
+
+
+export CHART_NAME=${1:?"Please provide an CHART_NAME argument"}
+export VERSION=${2:?"Please provide an VERSION argument"}
+
+build_json=$(</dev/stdin)
+jq -Mr ".helmCharts[\"$CHART_NAME\"].version = \"$VERSION\"" <<< "$build_json"
