@@ -1,4 +1,13 @@
 {
-  "version": "1.0.0",
-  "helmCharts": {}
+  "version": "1.0.0-1",
+  "helmCharts": {
+    "sftd": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-avs",
+      "version": "0.40.0",
+      "meta": {
+        "appVersion": "4.0.211",
+        "commit": "e40d060"
+      }
+    }
+  }
 }
