@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-3",
+  "version": "1.0.0-4",
   "helmCharts": {
     "account-pages": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
@@ -12,10 +12,10 @@
     },
     "sftd": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-avs",
-      "version": "0.40.0",
+      "version": "0.42.0",
       "meta": {
-        "appVersion": "4.0.211",
-        "commit": "e40d060"
+        "appVersion": "4.0.212",
+        "commit": "85e4314"
       }
     },
     "wire-server": {
