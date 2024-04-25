@@ -1,6 +1,15 @@
 {
   "version": "1.0.0-2",
   "helmCharts": {
+    "account-pages": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
+      "version": "0.1.0-pre.73",
+      "meta": {
+        "appVersion": "2.5.0-v0.31.15-3b736fc",
+        "commitURL": "https://github.com/wireapp/wire-account/commit/3b736fc938c7b233df4be200f9015386cf962b9a",
+        "commit": "3b736fc938c7b233df4be200f9015386cf962b9a"
+      }
+    },
     "sftd": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-avs",
       "version": "0.40.0",
