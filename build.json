@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-q1-2024.200",
+  "version": "1.0.0-q1-2024.201",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -68,11 +68,11 @@
       }
     },
     "coturn": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "4.42.0-pre.27",
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-stefan",
+      "version": "0.0.42",
       "meta": {
-        "commit": "a2e5c0a161e98f6af867c10bc7046cffabb9685f",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/a2e5c0a161e98f6af867c10bc7046cffabb9685f"
+        "commit": "3d5ba8787232e2cdbf204022ea843b25c0e4d194",
+        "commitURL": "https://github.com/wireapp/coturn/commit/3d5ba8787232e2cdbf204022ea843b25c0e4d194"
       }
     },
     "databases-ephemeral": {
