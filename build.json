@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-q1-2024.269",
+  "version": "1.0.0-q1-2024.270",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -68,11 +68,11 @@
       }
     },
     "coturn": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "4.42.0-pre.49",
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "4.6.2-federation-wireapp.18",
       "meta": {
-        "commit": "4d505e03696fecfea6864b1257346aabd9cc7b2e",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/4d505e03696fecfea6864b1257346aabd9cc7b2e"
+        "commit": "351ec052672a5524b9087661df0ef2ff4116e190",
+        "commitURL": "https://github.com/wireapp/coturn/commit/351ec052672a5524b9087661df0ef2ff4116e190"
       }
     },
     "databases-ephemeral": {
