@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-q1-2024.202",
+  "version": "1.0.0-q1-2024.203",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -69,7 +69,7 @@
     },
     "coturn": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-stefan",
-      "version": "0.0.42",
+      "version": "4.6.2-helm-chart-wireapp.1",
       "meta": {
         "commit": "3d5ba8787232e2cdbf204022ea843b25c0e4d194",
         "commitURL": "https://github.com/wireapp/coturn/commit/3d5ba8787232e2cdbf204022ea843b25c0e4d194"
