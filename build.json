@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-24",
+  "version": "1.0.0-25",
   "helmCharts": {
     "account-pages": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
@@ -220,10 +220,10 @@
     },
     "coturn": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "4.6.2-federation-wireapp.18",
+      "version": "4.6.2-federation-wireapp.22",
       "meta": {
-        "commit": "351ec052672a5524b9087661df0ef2ff4116e190",
-        "commitURL": "https://github.com/wireapp/coturn/commit/351ec052672a5524b9087661df0ef2ff4116e190"
+        "commit": "399ca41fafc9402113178e1059776e5624c5ea42",
+        "commitURL": "https://github.com/wireapp/coturn/commit/399ca41fafc9402113178e1059776e5624c5ea42"
       }
     },
     "inbucket": {
