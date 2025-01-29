@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-q1-2024.297",
+  "version": "1.0.0-q1-2024.298",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -270,10 +270,10 @@
     },
     "smallstep-accomp": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "6.0.6",
+      "version": "6.0.7",
       "meta": {
-        "commit": "af1426b0bda1bf266a7b4ff79cff99c6da483dbe",
-        "commitURL": "https://github.com/wireapp/helm-charts/commit/af1426b0bda1bf266a7b4ff79cff99c6da483dbe"
+        "commit": "b438faf19acc0d37d0eb2013bd90e03ae2a87ed5",
+        "commitURL": "https://github.com/wireapp/helm-charts/commit/b438faf19acc0d37d0eb2013bd90e03ae2a87ed5"
       }
     },
     "k8ssandra-operator": {
