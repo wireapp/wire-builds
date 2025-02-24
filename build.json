@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-zulu.2002",
+  "version": "1.0.0-zulu.2003",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -29,10 +29,10 @@
     },
     "sftd": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-avs",
-      "version": "0.105.0",
+      "version": "0.106.0",
       "meta": {
-        "appVersion": "5.0.37",
-        "commit": "2018011"
+        "appVersion": "5.0.38",
+        "commit": "fe3f922"
       }
     },
     "aws-ingress": {
