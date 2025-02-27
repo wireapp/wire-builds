@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-48",
+  "version": "1.0.0-49",
   "helmCharts": {
     "account-pages": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
@@ -286,10 +286,10 @@
     },
     "k8ssandra-operator": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "1.15.0",
+      "version": "1.16.0",
       "meta": {
-        "commit": "4e054060119355e3ab8ae5eafe696140b9c1bce9",
-        "commitURL": "https://github.com/wireapp/helm-charts/commit/4e054060119355e3ab8ae5eafe696140b9c1bce9"
+        "commit": "ec172d6bd800617bb24a5b95342bb62da3670930",
+        "commitURL": "https://github.com/wireapp/helm-charts/commit/ec172d6bd800617bb24a5b95342bb62da3670930"
       }
     },
     "openebs": {
