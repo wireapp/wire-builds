@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-zulu.2259",
+  "version": "1.0.0-zulu.2260",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -261,11 +261,11 @@
     },
     "account-pages": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
-      "version": "0.6.0-pre.1",
+      "version": "0.6.0-pre.3",
       "meta": {
-        "appVersion": "2.7.0-v0.31.35-da61997",
-        "commitURL": "https://github.com/wireapp/wire-account/commit/da6199723ff59e9cc9819b7e43aece833a387471",
-        "commit": "da6199723ff59e9cc9819b7e43aece833a387471"
+        "appVersion": "2.7.0-v0.31.35-5d2207d",
+        "commitURL": "https://github.com/wireapp/wire-account/commit/5d2207d181aec614bf9444bfe7bc93a289893810",
+        "commit": "5d2207d181aec614bf9444bfe7bc93a289893810"
       }
     },
     "ldap-scim-bridge": {
