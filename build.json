@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-80",
+  "version": "1.0.0-81",
   "helmCharts": {
     "account-pages": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
@@ -334,10 +334,10 @@
     },
     "kube-prometheus-stack": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "meta": {
-        "commit": "d8845dcf129cfac0a690c22f43090c5fd86dbe02",
-        "commitURL": "https://github.com/wireapp/helm-charts/commit/d8845dcf129cfac0a690c22f43090c5fd86dbe02"
+        "commit": "a97d40cda870d6406797f948cb294c7eabbe9841",
+        "commitURL": "https://github.com/wireapp/helm-charts/commit/a97d40cda870d6406797f948cb294c7eabbe9841"
       }
     }
   }
