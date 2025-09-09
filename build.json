@@ -1,12 +1,12 @@
 {
-  "version": "1.0.0-zulu.3032",
+  "version": "1.0.0-zulu.3033",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "webapp": {
@@ -37,34 +37,34 @@
     },
     "aws-ingress": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "backoffice": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "calling-test": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "cassandra-external": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "coturn": {
@@ -77,74 +77,74 @@
     },
     "databases-ephemeral": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "demo-smtp": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "elasticsearch-curator": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "elasticsearch-ephemeral": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "elasticsearch-external": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "fake-aws": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "fake-aws-s3": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "fake-aws-sqs": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "fluent-bit": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "inbucket": {
@@ -157,34 +157,34 @@
     },
     "ingress-nginx-controller": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "k8ssandra-test-cluster": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "kibana": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "minio-external": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "nginx-ingress-controller": {
@@ -197,10 +197,10 @@
     },
     "nginx-ingress-services": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "postgresql": {
@@ -213,50 +213,50 @@
     },
     "rabbitmq": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "rabbitmq-external": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "reaper": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "redis-cluster": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "redis-ephemeral": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "restund": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "account-pages": {
@@ -270,10 +270,10 @@
     },
     "ldap-scim-bridge": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "smallstep-accomp": {
@@ -318,10 +318,10 @@
     },
     "wire-server-enterprise": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.22.13",
+      "version": "5.22.14",
       "meta": {
-        "commit": "6cab105fbc3ff16a28a198838e73ee8da91000ee",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/6cab105fbc3ff16a28a198838e73ee8da91000ee"
+        "commit": "b72a5eb157f03b7425fdca7b45deae918c83a38f",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/b72a5eb157f03b7425fdca7b45deae918c83a38f"
       }
     },
     "disallowed-clients": {
