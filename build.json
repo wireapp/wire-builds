@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-zulu.2227",
+  "version": "1.0.0-zulu.2228",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -278,10 +278,10 @@
     },
     "smallstep-accomp": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "6.0.10",
+      "version": "6.0.11",
       "meta": {
-        "commit": "f0c1d5271ec18ff2e544c40733e135e8b723859e",
-        "commitURL": "https://github.com/wireapp/helm-charts/commit/f0c1d5271ec18ff2e544c40733e135e8b723859e"
+        "commit": "f291b384c6064fc01cfb5fc2430f9a1ede5e5c17",
+        "commitURL": "https://github.com/wireapp/helm-charts/commit/f291b384c6064fc01cfb5fc2430f9a1ede5e5c17"
       }
     },
     "k8ssandra-operator": {
