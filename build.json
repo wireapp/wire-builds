@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-118",
+  "version": "1.0.0-119",
   "helmCharts": {
     "account-pages": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
@@ -370,6 +370,14 @@
       "meta": {
         "commit": "ace92406c8117b3d36d3529f4133c876d67d3b03",
         "commitURL": "https://github.com/wireapp/helm-charts/commit/ace92406c8117b3d36d3529f4133c876d67d3b03"
+      }
+    },
+    "disallowed-clients": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "0.1.0",
+      "meta": {
+        "commit": "0b5711b256298fecc22f9436bbd8eadf3a0c469d",
+        "commitURL": "https://github.com/wireapp/helm-charts/commit/0b5711b256298fecc22f9436bbd8eadf3a0c469d"
       }
     }
   }
