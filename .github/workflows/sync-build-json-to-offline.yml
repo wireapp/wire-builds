@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'build.json'
+  workflow_dispatch:  # Allows manual triggering from GitHub UI or CLI
 
 jobs:
   sync-to-offline:
