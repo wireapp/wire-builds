@@ -1,7 +1,12 @@
 name: Create PR to wire-server-deploy
 
 on:
-  workflow_dispatch:  # Manual triggering only for testing
+  push:
+    branches:
+      - offline
+    paths:
+      - 'build.json'
+  workflow_dispatch:  # Manual triggering for testing
 
 jobs:
   create-deploy-pr:
