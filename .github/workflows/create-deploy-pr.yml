@@ -6,6 +6,9 @@ on:
       - offline
     paths:
       - 'build.json'
+  pull_request:
+    paths:
+      - 'build.json'
   workflow_dispatch:  # Manual triggering for testing
 
 jobs:
