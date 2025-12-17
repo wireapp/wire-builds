@@ -122,8 +122,8 @@ jobs:
 
           # Get old and new URLs
           git checkout master
-          CURRENT_URL=$(grep -oP 'wire_build="\K[^"]+' "$SCRIPT_FILE" || echo "")
-          OLD_SHA=$(echo "$CURRENT_URL" | grep -oP 'wire-builds/\K[^/]+' || echo "")
+          CURRENT_URL=$(grep -oP 'wire_build="\K[^"]+' "$SCRIPT_FILE" | head -1 | tr -d '\n' || echo "")
+          OLD_SHA=$(echo "$CURRENT_URL" | grep -oP 'wire-builds/\K[^/]+' | head -1 || echo "")
           NEW_SHA="${{ steps.get-sha.outputs.commit_sha }}"
 
           # Download both build.json files
