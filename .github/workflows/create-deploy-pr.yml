@@ -131,19 +131,42 @@ jobs:
           echo "Old URL: $CURRENT_URL"
           echo "New URL: $NEW_URL"
 
+          # Try to download old build.json
+          OLD_DOWNLOADED=false
           if [ -n "$CURRENT_URL" ]; then
-            if curl -sf "$CURRENT_URL" > old_build.json; then
-              echo "Successfully downloaded old build.json"
-              echo "Old build.json chart count: $(jq '.helmCharts | length' old_build.json)"
+            if curl -sf "$CURRENT_URL" > old_build.json 2>/dev/null; then
+              echo "✓ Successfully downloaded old build.json from wire-server-deploy reference"
+              echo "  Chart count: $(jq '.helmCharts | length' old_build.json)"
+              OLD_DOWNLOADED=true
             else
-              echo "Failed to download old build.json, using empty charts"
-              echo '{"helmCharts":{}}' > old_build.json
+              echo "✗ Failed to download from: $CURRENT_URL"
             fi
-          else
-            echo "No CURRENT_URL found, using empty charts"
+          fi
+
+          # Fallback: try previous commit on offline branch
+          if [ "$OLD_DOWNLOADED" = "false" ]; then
+            echo "Attempting fallback: downloading from previous wire-builds commit..."
+            PREV_COMMIT=$(git -C .. rev-parse HEAD~1 2>/dev/null || echo "")
+            if [ -n "$PREV_COMMIT" ]; then
+              FALLBACK_URL="https://raw.githubusercontent.com/wireapp/wire-builds/$PREV_COMMIT/build.json"
+              echo "Trying: $FALLBACK_URL"
+              if curl -sf "$FALLBACK_URL" > old_build.json 2>/dev/null; then
+                echo "✓ Successfully downloaded from previous commit"
+                echo "  Chart count: $(jq '.helmCharts | length' old_build.json)"
+                OLD_DOWNLOADED=true
+              else
+                echo "✗ Failed to download from previous commit"
+              fi
+            fi
+          fi
+
+          # Final fallback: empty charts
+          if [ "$OLD_DOWNLOADED" = "false" ]; then
+            echo "Using empty charts (no baseline for comparison)"
             echo '{"helmCharts":{}}' > old_build.json
           fi
 
+          # Download new build.json
           curl -sf "$NEW_URL" > new_build.json
           echo "New build.json chart count: $(jq '.helmCharts | length' new_build.json)"
 
