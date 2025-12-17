@@ -128,8 +128,24 @@ jobs:
 
           # Download both build.json files
           echo "Downloading build.json files for comparison..."
-          curl -sf "$CURRENT_URL" > old_build.json || echo "{}" > old_build.json
+          echo "Old URL: $CURRENT_URL"
+          echo "New URL: $NEW_URL"
+
+          if [ -n "$CURRENT_URL" ]; then
+            if curl -sf "$CURRENT_URL" > old_build.json; then
+              echo "Successfully downloaded old build.json"
+              echo "Old build.json chart count: $(jq '.helmCharts | length' old_build.json)"
+            else
+              echo "Failed to download old build.json, using empty charts"
+              echo '{"helmCharts":{}}' > old_build.json
+            fi
+          else
+            echo "No CURRENT_URL found, using empty charts"
+            echo '{"helmCharts":{}}' > old_build.json
+          fi
+
           curl -sf "$NEW_URL" > new_build.json
+          echo "New build.json chart count: $(jq '.helmCharts | length' new_build.json)"
 
           # Extract wire-server version (always show)
           WS_VERSION=$(jq -r '.helmCharts["wire-server"].version // "N/A"' new_build.json)
@@ -146,16 +162,24 @@ jobs:
             echo ""
 
             echo "## Changed Charts"
-            # Find and display changed charts
-            jq -r --slurpfile old old_build.json '
+            # Find and display changed charts (only if old version exists and differs)
+            CHANGED_CHARTS=$(jq -r --slurpfile old old_build.json '
               .helmCharts | to_entries[] |
               select(
-                ($old[0].helmCharts[.key].version // "") != .value.version or
-                ($old[0].helmCharts[.key].meta.commit // "") != .value.meta.commit
+                $old[0].helmCharts[.key] != null and (
+                  ($old[0].helmCharts[.key].version // "") != .value.version or
+                  ($old[0].helmCharts[.key].meta.commit // "") != .value.meta.commit
+                )
               ) |
-              "**" + .key + "**: `" + ($old[0].helmCharts[.key].version // "N/A") + "` → `" + .value.version + "`" +
+              "**" + .key + "**: `" + $old[0].helmCharts[.key].version + "` → `" + .value.version + "`" +
               (if .value.meta.commitURL then " ([`" + (.value.meta.commit[:7]) + "`](" + .value.meta.commitURL + "))" else "" end)
-            ' new_build.json
+            ' new_build.json)
+
+            if [ -n "$CHANGED_CHARTS" ]; then
+              echo "$CHANGED_CHARTS"
+            else
+              echo "_No chart version changes detected_"
+            fi
 
             echo ""
             echo "---"
