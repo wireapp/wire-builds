@@ -173,7 +173,7 @@ jobs:
             exit 0
           fi
 
-          # Get old and new URLs
+          # Get old and new URLs (reuse the same extraction logic as commit message)
           git checkout master
 
           # Debug: show the relevant line from the file
@@ -191,6 +191,11 @@ jobs:
 
           echo "Extracted CURRENT_URL: '$CURRENT_URL'"
           echo "Extracted OLD_SHA: '$OLD_SHA'"
+
+          # Verify extraction worked
+          if [ "$CURRENT_URL" = "$1" ] || [ -z "$OLD_SHA" ]; then
+            echo "Warning: URL extraction may have failed, CURRENT_URL='$CURRENT_URL', OLD_SHA='$OLD_SHA'"
+          fi
 
           # Download both build.json files
           echo "Downloading build.json files for comparison..."
