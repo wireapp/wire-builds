@@ -94,9 +94,58 @@ jobs:
           echo "Changes:"
           git diff
 
-          # Commit the changes
+          # Generate detailed commit message by comparing build.json files
+          echo "Generating detailed commit message..."
+
+          # Get old SHA from current master
+          CURRENT_URL_FOR_COMMIT=$(grep -oP 'wire_build="https\K[^"]+' "$SCRIPT_FILE" | head -1)
+          if [ -n "$CURRENT_URL_FOR_COMMIT" ]; then
+            CURRENT_URL_FOR_COMMIT="https${CURRENT_URL_FOR_COMMIT}"
+          fi
+          OLD_SHA_FOR_COMMIT=$(echo "$CURRENT_URL_FOR_COMMIT" | grep -oP 'wire-builds/\K[^/]+' | head -1 || echo "")
+
+          # Try to download old build.json for commit message
+          if [ -n "$CURRENT_URL_FOR_COMMIT" ] && curl -sf "$CURRENT_URL_FOR_COMMIT" > /tmp/old_build.json 2>/dev/null; then
+            echo "Downloaded old build.json for commit message"
+          else
+            echo '{"helmCharts":{}}' > /tmp/old_build.json
+          fi
+
+          # Download new build.json
+          curl -sf "$NEW_URL" > /tmp/new_build.json 2>/dev/null || echo '{"helmCharts":{}}' > /tmp/new_build.json
+
+          # Extract wire-server version
+          WS_VERSION=$(jq -r '.helmCharts["wire-server"].version // "N/A"' /tmp/new_build.json)
+
+          # Find changed charts
+          COMMIT_CHANGES=$(jq -r --slurpfile old /tmp/old_build.json '
+            [.helmCharts | to_entries[] |
+             select($old[0].helmCharts[.key] != null and
+                    (($old[0].helmCharts[.key].version // "") != .value.version or
+                     ($old[0].helmCharts[.key].meta.commit // "") != .value.meta.commit)) |
+             "- " + .key + ": " + $old[0].helmCharts[.key].version + " → " + .value.version
+            ] | join("\n")
+          ' /tmp/new_build.json)
+
+          # Build commit message
+          {
+            echo "Update wire-builds to ${OLD_SHA_FOR_COMMIT:0:7}...${{ steps.get-sha.outputs.commit_sha:0:7 }}"
+            echo ""
+            echo "Wire Server: $WS_VERSION"
+            echo ""
+            if [ -n "$COMMIT_CHANGES" ]; then
+              echo "Changed charts:"
+              echo "$COMMIT_CHANGES"
+            else
+              echo "No chart version changes"
+            fi
+            echo ""
+            echo "Build: $NEW_URL"
+          } > /tmp/commit-msg.txt
+
+          # Commit with detailed message
           git add "$SCRIPT_FILE"
-          git commit -m "Update wire-build to version $NEW_URL"
+          git commit -F /tmp/commit-msg.txt
 
           # Push the branch (force push to update existing PR)
           git push -f origin "$BRANCH_NAME"
@@ -122,9 +171,22 @@ jobs:
 
           # Get old and new URLs
           git checkout master
-          CURRENT_URL=$(grep -oP 'wire_build="\K[^"]+' "$SCRIPT_FILE" | head -1 | tr -d '\n' || echo "")
-          OLD_SHA=$(echo "$CURRENT_URL" | grep -oP 'wire-builds/\K[^/]+' | head -1 || echo "")
+
+          # Debug: show the relevant line from the file
+          echo "=== Extracting wire_build URL from $SCRIPT_FILE ==="
+          grep 'wire_build=' "$SCRIPT_FILE" || echo "No wire_build line found"
+
+          # Extract URL - look for the line with https (not the function parameter "$1")
+          CURRENT_URL=$(grep -oP 'wire_build="https\K[^"]+' "$SCRIPT_FILE" | head -1 | tr -d '\n\r' | xargs || echo "")
+          # Add back the https:// prefix that was excluded in the grep
+          if [ -n "$CURRENT_URL" ]; then
+            CURRENT_URL="https${CURRENT_URL}"
+          fi
+          OLD_SHA=$(echo "$CURRENT_URL" | grep -oP 'wire-builds/\K[^/]+' | head -1 | tr -d '\n\r' || echo "")
           NEW_SHA="${{ steps.get-sha.outputs.commit_sha }}"
+
+          echo "Extracted CURRENT_URL: '$CURRENT_URL'"
+          echo "Extracted OLD_SHA: '$OLD_SHA'"
 
           # Download both build.json files
           echo "Downloading build.json files for comparison..."
