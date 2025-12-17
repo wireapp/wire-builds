@@ -128,8 +128,9 @@ jobs:
           ' /tmp/new_build.json)
 
           # Build commit message
+          NEW_SHA_FOR_COMMIT="${{ steps.get-sha.outputs.commit_sha }}"
           {
-            echo "Update wire-builds to ${OLD_SHA_FOR_COMMIT:0:7}...${{ steps.get-sha.outputs.commit_sha:0:7 }}"
+            echo "Update wire-builds to ${OLD_SHA_FOR_COMMIT:0:7}...${NEW_SHA_FOR_COMMIT:0:7}"
             echo ""
             echo "Wire Server: $WS_VERSION"
             echo ""
