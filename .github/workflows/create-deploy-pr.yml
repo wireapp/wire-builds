@@ -69,6 +69,15 @@ jobs:
           echo "to:"
           echo "  $NEW_URL"
 
+          # Get old SHA from master BEFORE we modify the file
+          git checkout master
+          OLD_URL_FOR_COMMIT=$(grep -oP 'wire_build="https\K[^"]+' "$SCRIPT_FILE" | head -1)
+          if [ -n "$OLD_URL_FOR_COMMIT" ]; then
+            OLD_URL_FOR_COMMIT="https${OLD_URL_FOR_COMMIT}"
+          fi
+          OLD_SHA_FOR_COMMIT=$(echo "$OLD_URL_FOR_COMMIT" | grep -oP 'wire-builds/\K[^/]+' | head -1 || echo "")
+          echo "Old wire-builds SHA from master: $OLD_SHA_FOR_COMMIT"
+
           # Fetch and checkout or create branch
           git fetch origin "$BRANCH_NAME" || true
           if git rev-parse --verify "origin/$BRANCH_NAME" >/dev/null 2>&1; then
@@ -97,17 +106,11 @@ jobs:
           # Generate detailed commit message by comparing build.json files
           echo "Generating detailed commit message..."
 
-          # Get old SHA from current master
-          CURRENT_URL_FOR_COMMIT=$(grep -oP 'wire_build="https\K[^"]+' "$SCRIPT_FILE" | head -1)
-          if [ -n "$CURRENT_URL_FOR_COMMIT" ]; then
-            CURRENT_URL_FOR_COMMIT="https${CURRENT_URL_FOR_COMMIT}"
-          fi
-          OLD_SHA_FOR_COMMIT=$(echo "$CURRENT_URL_FOR_COMMIT" | grep -oP 'wire-builds/\K[^/]+' | head -1 || echo "")
-
           # Try to download old build.json for commit message
-          if [ -n "$CURRENT_URL_FOR_COMMIT" ] && curl -sf "$CURRENT_URL_FOR_COMMIT" > /tmp/old_build.json 2>/dev/null; then
-            echo "Downloaded old build.json for commit message"
+          if [ -n "$OLD_URL_FOR_COMMIT" ] && curl -sf "$OLD_URL_FOR_COMMIT" > /tmp/old_build.json 2>/dev/null; then
+            echo "Downloaded old build.json for commit message from: $OLD_URL_FOR_COMMIT"
           else
+            echo "Could not download old build.json, using empty baseline"
             echo '{"helmCharts":{}}' > /tmp/old_build.json
           fi
 
