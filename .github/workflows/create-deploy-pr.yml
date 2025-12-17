@@ -69,11 +69,13 @@ jobs:
 
           # Check if there are changes
           if git diff --quiet; then
-            echo "No changes detected"
+            echo "No changes detected - wire_build URL is already up to date"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
           # Show the diff
+          echo "Changes detected:"
           git diff
 
           # Commit the changes
@@ -84,8 +86,10 @@ jobs:
           git push -f origin "$BRANCH_NAME"
 
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "has_changes=true" >> $GITHUB_OUTPUT
 
       - name: Create or Update Pull Request
+        if: steps.update-branch.outputs.has_changes == 'true'
         working-directory: wire-server-deploy
         env:
           GH_TOKEN: ${{ secrets.ZEBOT_TOKEN || secrets.GITHUB_TOKEN }}
@@ -130,4 +134,8 @@ jobs:
 
       - name: Summary
         run: |
-          echo "✅ PR created to wire-server-deploy with commit ${{ steps.get-sha.outputs.commit_sha }}"
+          if [ "${{ steps.update-branch.outputs.has_changes }}" == "true" ]; then
+            echo "✅ PR created/updated in wire-server-deploy with commit ${{ steps.get-sha.outputs.commit_sha }}"
+          else
+            echo "ℹ️ No changes needed - wire_build URL already up to date"
+          fi
