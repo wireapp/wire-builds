@@ -63,6 +63,33 @@ jobs:
           echo "Current wire-server version: $CURRENT_WS_VERSION"
           echo "Target wire-server version: $PINNED_VERSION"
 
+          # Fetch the correct commit SHA for the pinned version from wire-server releases
+          echo ""
+          echo "Fetching commit SHA for wire-server version $PINNED_VERSION..."
+          TAG_REF=$(curl -sf "https://api.github.com/repos/wireapp/wire-server/git/refs/tags/chart/$PINNED_VERSION")
+
+          if [ -z "$TAG_REF" ]; then
+            echo "⚠️  Warning: Could not find release tag chart/$PINNED_VERSION in wire-server"
+            echo "Will update version only, keeping existing commit metadata"
+            PINNED_COMMIT=""
+            PINNED_COMMIT_URL=""
+          else
+            TAG_SHA=$(echo "$TAG_REF" | jq -r '.object.sha')
+            TAG_TYPE=$(echo "$TAG_REF" | jq -r '.object.type')
+
+            if [ "$TAG_TYPE" = "tag" ]; then
+              # Annotated tag - dereference to get commit
+              TAG_OBJ=$(curl -sf "https://api.github.com/repos/wireapp/wire-server/git/tags/$TAG_SHA")
+              PINNED_COMMIT=$(echo "$TAG_OBJ" | jq -r '.object.sha')
+            else
+              # Lightweight tag or direct commit
+              PINNED_COMMIT="$TAG_SHA"
+            fi
+
+            PINNED_COMMIT_URL="https://github.com/wireapp/wire-server/commit/$PINNED_COMMIT"
+            echo "✓ Found commit for version $PINNED_VERSION: $PINNED_COMMIT"
+          fi
+
           # Find all charts that have the same version as current wire-server
           echo ""
           echo "Finding charts with version $CURRENT_WS_VERSION..."
@@ -79,9 +106,22 @@ jobs:
           for chart in $CHARTS_TO_UPDATE; do
             echo "Updating $chart: $CURRENT_WS_VERSION → $PINNED_VERSION"
 
-            jq --arg chart "$chart" --arg version "$PINNED_VERSION" '
-              .helmCharts[$chart].version = $version
-            ' build.json > build.json.tmp
+            if [ -n "$PINNED_COMMIT" ]; then
+              # Update version and commit metadata
+              jq --arg chart "$chart" \
+                 --arg version "$PINNED_VERSION" \
+                 --arg commit "$PINNED_COMMIT" \
+                 --arg commitURL "$PINNED_COMMIT_URL" '
+                .helmCharts[$chart].version = $version |
+                .helmCharts[$chart].meta.commit = $commit |
+                .helmCharts[$chart].meta.commitURL = $commitURL
+              ' build.json > build.json.tmp
+            else
+              # Update version only
+              jq --arg chart "$chart" --arg version "$PINNED_VERSION" '
+                .helmCharts[$chart].version = $version
+              ' build.json > build.json.tmp
+            fi
 
             mv build.json.tmp build.json
           done
