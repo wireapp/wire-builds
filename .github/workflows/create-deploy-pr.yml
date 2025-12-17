@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - offline
+      - pin-wire-server-version  # Temporary: for testing
     paths:
       - 'build.json'
   pull_request:
