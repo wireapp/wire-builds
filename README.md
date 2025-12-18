@@ -39,11 +39,27 @@ gh run watch
 ```
 
 **How it works:**
-1. Workflow fetches the correct commit SHA from wire-server releases
-2. Updates all charts that match the current wire-server version to the pinned version
-3. Updates both version numbers and commit metadata
-4. Creates a new commit and pushes to the branch
-5. Triggers PR creation to wire-server-deploy
+1. Workflow creates a temporary branch from the base branch (e.g., `offline`)
+2. Fetches the correct commit SHA from wire-server releases
+3. Updates all charts that match the current wire-server version to the pinned version
+4. Modifies root `build.json` with pinned versions
+5. Commits the changes and creates a Git tag: `pinned-<branch>-<version>`
+6. Pushes the tag to remote and deletes the temporary branch
+7. Creates a PR to wire-server-deploy using the tag name
+
+**Important:** The root `build.json` on the base branch (e.g., `offline`) remains unchanged at the latest version. Pinned versions are accessible via Git tags (e.g., `pinned-offline-5.23.0`) and referenced by clean URLs.
+
+**Example after pinning to 5.23.0:**
+```
+offline branch: build.json at 5.24.0 (unchanged)
+Git tag: pinned-offline-5.23.0 → points to commit with build.json at 5.23.0
+URL: https://raw.githubusercontent.com/wireapp/wire-builds/pinned-offline-5.23.0/build.json
+
+List all pinned versions:
+$ git tag -l 'pinned-offline-*'
+pinned-offline-5.23.0
+pinned-offline-5.22.0
+```
 
 **Available versions:** 5.24.0 down to 5.5.0
 

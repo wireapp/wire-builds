@@ -17,12 +17,25 @@ Pin wire-server and all related charts to a specific version.
 OPTIONS:
     -v, --version VERSION    Wire-server version to pin to (required)
     -f, --file FILE          Path to build.json (default: build.json)
-    -b, --branch BRANCH      Git branch to push to (default: current branch)
+    -b, --base-branch BRANCH Base branch to branch from (default: current branch)
     -h, --help               Show this help message
+
+DESCRIPTION:
+    Creates a temporary branch with pinned build.json, tags it, and pushes the tag.
+    The root build.json on the base branch remains unchanged.
+
+    Pins wire-server and related charts to the specified version.
+    Creates a Git tag: pinned-<base-branch>-<version>
+
+    The tag name is output to stdout for use in workflows.
 
 EXAMPLE:
     $0 --version 5.23.0
-    $0 --version 5.23.0 --file path/to/build.json --branch offline
+    # Creates tag: pinned-offline-5.23.0
+    # URL: https://raw.githubusercontent.com/.../pinned-offline-5.23.0/build.json
+
+    $0 --version 5.23.0 --base-branch offline
+    # Creates tag: pinned-offline-5.23.0
 
 EOF
     exit 1
@@ -32,7 +45,7 @@ EOF
 parse_args() {
     PINNED_VERSION=""
     BUILD_FILE="build.json"
-    GIT_BRANCH=""
+    BASE_BRANCH=""
 
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -44,8 +57,8 @@ parse_args() {
                 BUILD_FILE="$2"
                 shift 2
                 ;;
-            -b|--branch)
-                GIT_BRANCH="$2"
+            -b|--base-branch)
+                BASE_BRANCH="$2"
                 shift 2
                 ;;
             -h|--help)
@@ -69,8 +82,8 @@ parse_args() {
     fi
 
     # Get current branch if not specified
-    if [ -z "$GIT_BRANCH" ]; then
-        GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    if [ -z "$BASE_BRANCH" ]; then
+        BASE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
     fi
 }
 
@@ -131,17 +144,31 @@ update_chart() {
     fi
 }
 
-# Commit and push changes
+# Create temporary branch, commit pinned build.json, tag it, and push tag
 commit_and_push() {
     local current_version="$1"
     local pinned_version="$2"
     local charts="$3"
-    local branch="$4"
+    local base_branch="$4"
+    local source_build_file="$5"
 
-    log_info "Committing changes..."
+    local temp_branch="temp-pin-${pinned_version}"
+    local tag_name="pinned-${base_branch}-${pinned_version}"
 
+    log_info "Creating temporary branch: $temp_branch"
+
+    # Ensure we're on base branch
+    git checkout "$base_branch"
+
+    # Create temp branch
+    git checkout -b "$temp_branch"
+
+    # Replace root build.json with pinned version
+    cp "$source_build_file" build.json
+
+    log_info "Committing pinned build.json..."
     git_config_bot
-    git add "$BUILD_FILE"
+    git add build.json
 
     # Build commit message
     cat > /tmp/pin-commit-msg.txt <<EOF
@@ -149,15 +176,40 @@ Pin wire-server and related charts to $pinned_version
 
 Charts updated from $current_version to $pinned_version:
 $charts
+
+Base branch: $base_branch
+Tag: $tag_name
 EOF
 
     git commit -F /tmp/pin-commit-msg.txt
     rm -f /tmp/pin-commit-msg.txt
 
-    log_info "Pushing to branch: $branch"
-    git push origin "HEAD:refs/heads/$branch"
+    local commit_sha
+    commit_sha=$(git rev-parse HEAD)
+
+    log_info "Creating and pushing tag: $tag_name"
+
+    # Delete tag if it exists (for re-pinning same version)
+    if git ls-remote --tags origin | grep -q "refs/tags/$tag_name"; then
+        log_warning "Tag $tag_name already exists, deleting..."
+        git push origin --delete "$tag_name" || true
+    fi
+
+    # Create and push tag
+    git tag "$tag_name" "$commit_sha"
+    git push origin "$tag_name"
+
+    # Switch back to base branch and delete temp branch
+    log_info "Cleaning up temporary branch"
+    git checkout "$base_branch"
+    git branch -D "$temp_branch"
 
     log_success "Version pinning complete!"
+    log_success "Tag: $tag_name"
+    log_success "Commit SHA: $commit_sha"
+
+    # Output tag name (not commit SHA|path anymore)
+    echo "$tag_name"
 }
 
 # Main function
@@ -167,6 +219,12 @@ main() {
 
     log_info "Pinning wire-server and related charts to version $PINNED_VERSION"
     echo ""
+
+    # Create a temporary working file
+    local temp_build_file="/tmp/build-pinned-$PINNED_VERSION.json"
+    cp "$BUILD_FILE" "$temp_build_file"
+    local original_build_file="$BUILD_FILE"
+    BUILD_FILE="$temp_build_file"
 
     # Get current wire-server version
     local current_version
@@ -205,8 +263,11 @@ main() {
     done
     echo ""
 
-    # Commit and push
-    commit_and_push "$current_version" "$PINNED_VERSION" "$charts" "$GIT_BRANCH"
+    # Commit and push (returns commit SHA and file path)
+    commit_and_push "$current_version" "$PINNED_VERSION" "$charts" "$BASE_BRANCH" "$temp_build_file"
+
+    # Cleanup
+    rm -f "$temp_build_file"
 }
 
 # Run main function

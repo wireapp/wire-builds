@@ -53,19 +53,28 @@ jobs:
           fetch-depth: 0
 
       - name: Pin wire-server version if specified
+        id: pin-version
         if: ${{ inputs.wire_server_version != 'none' && inputs.wire_server_version != '' }}
         run: |
-          .github/scripts/pin-version.sh \
+          TAG_NAME=$(.github/scripts/pin-version.sh \
             --version "${{ inputs.wire_server_version }}" \
             --file build.json \
-            --branch "${{ github.ref_name }}"
+            --base-branch "${{ github.ref_name }}" | tail -1)
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "Pinned tag: $TAG_NAME"
 
-      - name: Get current commit SHA
-        id: get-sha
+      - name: Get reference for build.json
+        id: get-ref
         run: |
-          COMMIT_SHA=$(git rev-parse HEAD)
-          echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
-          echo "Current commit SHA: $COMMIT_SHA"
+          # Use pinned tag if pinning was performed, otherwise use current HEAD
+          if [ -n "${{ steps.pin-version.outputs.tag_name }}" ]; then
+            BUILD_REF="${{ steps.pin-version.outputs.tag_name }}"
+            echo "Using pinned tag: $BUILD_REF"
+          else
+            BUILD_REF=$(git rev-parse HEAD)
+            echo "Using commit SHA: $BUILD_REF"
+          fi
+          echo "build_ref=$BUILD_REF" >> $GITHUB_OUTPUT
 
       - name: Checkout wire-server-deploy
         uses: actions/checkout@v4
@@ -82,11 +91,11 @@ jobs:
           GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
           .github/scripts/update-deploy-pr.sh \
-            --sha "${{ steps.get-sha.outputs.commit_sha }}" \
+            --ref "${{ steps.get-ref.outputs.build_ref }}" \
             --deploy-dir wire-server-deploy \
             --token "${{ secrets.ZEBOT_TOKEN || secrets.GITHUB_TOKEN }}"
 
       - name: Summary
         run: |
           echo "✅ Workflow completed successfully"
-          echo "   Commit SHA: ${{ steps.get-sha.outputs.commit_sha }}"
+          echo "   Build reference: ${{ steps.get-ref.outputs.build_ref }}"

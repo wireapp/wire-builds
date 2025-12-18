@@ -19,7 +19,7 @@ Usage: $0 [OPTIONS]
 Update wire-server-deploy repository with new wire-builds reference.
 
 OPTIONS:
-    -s, --sha SHA            Wire-builds commit SHA (required)
+    -r, --ref REF            Git reference (commit SHA or tag name) (required)
     -d, --deploy-dir DIR     Path to wire-server-deploy directory (required)
     -t, --token TOKEN        GitHub token for creating PRs (required)
     -h, --help               Show this help message
@@ -30,7 +30,8 @@ ENVIRONMENT:
     GITHUB_RUN_ID            Workflow run ID (for PR body link)
 
 EXAMPLE:
-    $0 --sha abc123 --deploy-dir ./wire-server-deploy --token \$ZEBOT_TOKEN
+    $0 --ref abc123 --deploy-dir ./wire-server-deploy --token \$ZEBOT_TOKEN
+    $0 --ref pinned-offline-5.23.0 --deploy-dir ./wire-server-deploy --token \$ZEBOT_TOKEN
 
 EOF
     exit 1
@@ -38,14 +39,14 @@ EOF
 
 # Parse command line arguments
 parse_args() {
-    COMMIT_SHA=""
+    BUILD_REF=""
     DEPLOY_DIR=""
     GITHUB_TOKEN=""
 
     while [[ $# -gt 0 ]]; do
         case $1 in
-            -s|--sha)
-                COMMIT_SHA="$2"
+            -r|--ref)
+                BUILD_REF="$2"
                 shift 2
                 ;;
             -d|--deploy-dir)
@@ -67,8 +68,8 @@ parse_args() {
     done
 
     # Validate required arguments
-    if [ -z "$COMMIT_SHA" ]; then
-        log_error "Commit SHA is required"
+    if [ -z "$BUILD_REF" ]; then
+        log_error "Git reference is required"
         usage
     fi
 
@@ -302,9 +303,9 @@ main() {
 
     cd "$DEPLOY_DIR" || die "Failed to change to deploy directory"
 
-    local new_url="https://raw.githubusercontent.com/wireapp/wire-builds/$COMMIT_SHA/build.json"
+    local new_url="https://raw.githubusercontent.com/wireapp/wire-builds/$BUILD_REF/build.json"
 
-    log_info "Updating wire-server-deploy with commit: $COMMIT_SHA"
+    log_info "Updating wire-server-deploy with ref: $BUILD_REF"
     echo ""
 
     # Check if update is needed
