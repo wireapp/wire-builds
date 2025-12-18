@@ -109,15 +109,15 @@ fetch_commit_metadata() {
     local commit_sha
     local commit_url
 
-    log_info "Fetching commit SHA for wire-server version $version..." >&2
+    log_info "Fetching commit SHA for wire-server version $version..."
 
     if commit_sha=$(get_commit_from_release "$version"); then
         commit_url="https://github.com/wireapp/wire-server/commit/$commit_sha"
-        log_success "Found commit for version $version: $commit_sha" >&2
+        log_success "Found commit for version $version: $commit_sha"
         echo "$commit_sha|$commit_url"
     else
-        log_warning "Could not find release tag chart/$version in wire-server" >&2
-        log_warning "Will update version only, keeping existing commit metadata" >&2
+        log_warning "Could not find release tag chart/$version in wire-server"
+        log_warning "Will update version only, keeping existing commit metadata"
         echo "|"
     fi
 }

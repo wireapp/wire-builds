@@ -12,15 +12,15 @@ readonly COLOR_BLUE='\033[0;34m'
 
 # Logging functions
 log_info() {
-    echo -e "${COLOR_BLUE}ℹ${COLOR_RESET} $*"
+    echo -e "${COLOR_BLUE}ℹ${COLOR_RESET} $*" >&2
 }
 
 log_success() {
-    echo -e "${COLOR_GREEN}✓${COLOR_RESET} $*"
+    echo -e "${COLOR_GREEN}✓${COLOR_RESET} $*" >&2
 }
 
 log_warning() {
-    echo -e "${COLOR_YELLOW}⚠${COLOR_RESET} $*"
+    echo -e "${COLOR_YELLOW}⚠${COLOR_RESET} $*" >&2
 }
 
 log_error() {
