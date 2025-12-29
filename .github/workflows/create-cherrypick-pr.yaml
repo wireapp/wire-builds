@@ -3,8 +3,16 @@ name: create-cherrypick-pr
 on:
   workflow_dispatch:
     inputs:
-      source:
-        description: 'Source branch or commit to cherry-pick from'
+      sourceCommit:
+        description: 'Source commit to cherry-pick from'
+        required: true
+        type: string
+      targetBranch:
+        description: 'Target branch to create PR against'
+        required: true
+        type: string
+      charts:
+        description: 'Comma-separated list of charts to include'
         required: true
         type: string
 
@@ -15,4 +23,6 @@ jobs:
       - name: test
         shell: bash 
         run: |
-          echo "Source: ${{ inputs.source }}"
+          echo "Source commit: ${{ inputs.sourceCommit }}"
+          echo "Target branch: ${{ inputs.targetBranch }}"
+          echo "Charts: ${{ inputs.charts }}"
