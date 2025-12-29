@@ -15,4 +15,4 @@ jobs:
       - name: test
         shell: bash 
         run: |
-          echo "foo"
+          echo "Source: ${{ inputs.source }}"
