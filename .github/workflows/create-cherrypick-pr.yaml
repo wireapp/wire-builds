@@ -1,0 +1,13 @@
+name: create-cherrypick-pr
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  pick:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: test
+        shell: bash 
+        run: |
+          echo "foo"
