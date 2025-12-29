@@ -1,7 +1,12 @@
 name: create-cherrypick-pr
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'Source branch or commit to cherry-pick from'
+        required: true
+        type: string
 
 jobs:
   pick:
