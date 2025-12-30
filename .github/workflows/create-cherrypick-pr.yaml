@@ -52,6 +52,8 @@ jobs:
           echo "PR branch: $PR_BRANCH"
 
           cd target-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git reset --hard "$TARGET_COMMIT"
           git checkout -b "$PR_BRANCH"
 
