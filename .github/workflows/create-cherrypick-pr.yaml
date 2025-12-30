@@ -38,13 +38,24 @@ jobs:
           MEMORABLE_NAME: ${{ inputs.memorableName }}
         shell: bash 
         run: |
-          set -e
+          set -eo pipefail
+
           git config --global --add safe.directory "$PWD"
-          git clone https://x-access-token:"${GITHUB_TOKEN}"@github.com/${{ github.repository }} .
+          
+          # Clone source repo at HEAD to get latest scripts
+          git clone https://x-access-token:"${GITHUB_TOKEN}"@github.com/${{ github.repository }} source-repo
+          
+          # Clone target repo to create PR from
+          git clone https://x-access-token:"${GITHUB_TOKEN}"@github.com/${{ github.repository }} target-repo
           
           PR_BRANCH="cherry-pick-${TARGET_BRANCH}-$(date '+%Y%m%d%H%M%S')"
           echo "PR branch: $PR_BRANCH"
 
+          cd target-repo
           git reset --hard "$TARGET_COMMIT"
           git checkout -b "$PR_BRANCH"
 
+          ../source-repo/.github/scripts/cherrypick.py "$TARGET_COMMIT" "$SOURCE_COMMIT" "$CHARTS" \
+            | jq > ./build.json
+
+          git diff
