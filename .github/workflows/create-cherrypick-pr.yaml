@@ -58,4 +58,21 @@ jobs:
           ../source-repo/.github/scripts/cherrypick.py "$TARGET_COMMIT" "$SOURCE_COMMIT" "$CHARTS" \
             | jq > ./build.json
 
-          git diff
+          git add build.json
+          git commit -m "Pick $CHARTS from ${SOURCE_COMMIT:0:8}"
+          
+          # Create PR body
+          PR_BODY="This PR picks the following helm charts from https://github.com/${{ github.repository }}/commit/${SOURCE_COMMIT}:"
+          PR_BODY+=$'\n\n'
+          for chart in $(echo "$CHARTS" | tr ',' ' '); do
+            PR_BODY+="- \`$chart\`"
+            PR_BODY+=$'\n'
+          done
+          PR_BODY+=$'\n**Memorable name:** '"$MEMORABLE_NAME"
+          PR_BODY+=$'\n\nYou can create PRs like this with the `create-cherrypick-pr` workflow or the `release-manager` app.'
+
+          # Push branch and create PR
+          git push origin "$PR_BRANCH"
+          gh pr create --base "$TARGET_BRANCH" --head "$PR_BRANCH" \
+            --title "Cherry-pick: Pick $CHARTS from ${SOURCE_COMMIT:0:8}" \
+            --body "$PR_BODY"
