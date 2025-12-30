@@ -11,6 +11,10 @@ on:
         description: 'Target branch to create PR against'
         required: true
         type: string
+      targetCommit:
+        description: 'Target commit/reference to base the PR on'
+        required: true
+        type: string
       charts:
         description: 'Comma-separated list of charts to include'
         required: true
@@ -25,9 +29,22 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOURCE_COMMIT: ${{ inputs.sourceCommit }}
+          TARGET_BRANCH: ${{ inputs.targetBranch }}
+          TARGET_COMMIT: ${{ inputs.targetCommit }}
+          CHARTS: ${{ inputs.charts }}
+          MEMORABLE_NAME: ${{ inputs.memorableName }}
         shell: bash 
         run: |
-          echo "Source commit: ${{ inputs.sourceCommit }}"
-          echo "Target branch: ${{ inputs.targetBranch }}"
-          echo "Charts: ${{ inputs.charts }}"
-          echo "Charts: ${{ inputs.memorableName }}"
+          set -e
+          git config --global --add safe.directory "$PWD"
+          git clone https://x-access-token:"${GITHUB_TOKEN}"@github.com/${{ github.repository }} .
+          
+          PR_BRANCH="cherry-pick-${TARGET_BRANCH}-$(date '+%Y%m%d%H%M%S')"
+          echo "PR branch: $PR_BRANCH"
+
+          git reset --hard "$TARGET_COMMIT"
+          git checkout -b "$PR_BRANCH"
+
