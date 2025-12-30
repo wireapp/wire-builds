@@ -15,6 +15,10 @@ on:
         description: 'Comma-separated list of charts to include'
         required: true
         type: string
+      memorableName:
+        description: 'A easy-to-remember name to recognize the PR by'
+        required: true
+        type: string
 
 jobs:
   pick:
@@ -26,3 +30,4 @@ jobs:
           echo "Source commit: ${{ inputs.sourceCommit }}"
           echo "Target branch: ${{ inputs.targetBranch }}"
           echo "Charts: ${{ inputs.charts }}"
+          echo "Charts: ${{ inputs.memorableName }}"
