@@ -71,11 +71,11 @@ jobs:
             PR_BODY+=$'\n'
           done
           PR_BODY+=$'\n**Memorable name:** '"$MEMORABLE_NAME"
-          PR_BODY+=$'\n\nYou can create PRs like this with the `create-cherrypick-pr` workflow or the `release-manager` app.'
+          PR_BODY+=$'\n\nYou can create PRs like this with the [release-manager](https://release-manager.ops.zinfra.io/) app or via the `create-cherrypick-pr` workflow'
 
           # Count charts and push branch and create PR
           CHART_COUNT=$(echo "$CHARTS" | tr ',' '\n' | wc -l)
           git push origin "$PR_BRANCH"
           gh pr create --base "$TARGET_BRANCH" --head "$PR_BRANCH" \
-            --title "Cherry-pick: Pick $CHART_COUNT chart(s) from ${SOURCE_COMMIT:0:8}" \
+            --title "Pick $CHART_COUNT chart(s) from ${SOURCE_COMMIT:0:8} to $TARGET_BRANCH" \
             --body "$PR_BODY"
