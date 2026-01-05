@@ -26,6 +26,11 @@ def main():
     build_json_target = get_build(target_commit)
     build_json_source = get_build(source_commit)
     for chart in charts:
+        try:
+            source_value = build_json_source['helmCharts'][chart]
+        except KeyError:
+            print(f'ERROR: There is no "{chart}" chart in the build.json at source commit {source_commit}', file=sys.stderr)
+            sys.exit(1)
         build_json_target['helmCharts'][chart] = build_json_source['helmCharts'][chart]
 
     print(json.dumps(build_json_target))
