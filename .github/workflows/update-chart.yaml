@@ -47,17 +47,21 @@ jobs:
             exit 1
           fi
           
-          # Update the helm chart to the provided value using jq
-          jq --arg chart "$KEY" --argjson value "$VALUE" '.helmCharts[$chart] = $value' build.json > build.json.tmp
-          mv build.json.tmp build.json
-          
-          # Commit and push with retry loop
-          git add build.json
-          git commit -m "Update $KEY to version $VERSION"
-          
-          # Retry loop for push conflicts
+          # Retry loop for updating and pushing
           MAX_RETRIES=5
           for attempt in $(seq 1 $MAX_RETRIES); do
+            # Pull latest changes
+            git pull origin "$BRANCH"
+            
+            # Update the helm chart to the provided value using jq
+            jq --arg chart "$KEY" --argjson value "$VALUE" '.helmCharts[$chart] = $value' build.json > build.json.tmp
+            mv build.json.tmp build.json
+            
+            # Commit the change
+            git add build.json
+            git commit -m "Update $KEY to version $VERSION"
+            
+            # Try to push
             if git push origin "$BRANCH"; then
               echo "Successfully pushed on attempt $attempt"
               break
@@ -69,12 +73,13 @@ jobs:
               
               echo "Push failed on attempt $attempt, retrying..."
               
+              # Reset to clean state before retry
+              git fetch origin "$BRANCH"
+              git reset --hard "origin/$BRANCH"
+              
               # Wait random time between 1-5 seconds
               sleep_time=$((1 + RANDOM % 5))
               echo "Waiting $sleep_time seconds..."
               sleep $sleep_time
-              
-              # Pull latest changes and try to rebase
-              git pull --rebase origin "$BRANCH"
             fi
           done
