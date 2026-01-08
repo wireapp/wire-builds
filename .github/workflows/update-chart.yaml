@@ -20,7 +20,13 @@ jobs:
   update:
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout and update chart
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Update chart
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ inputs.branch }}
