@@ -1,0 +1,80 @@
+name: update-chart
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to update'
+        required: true
+        type: string
+      key:
+        description: 'Helm chart name (e.g., webapp, wire-server)'
+        required: true
+        type: string
+      value:
+        description: 'New value to set (JSON)'
+        required: true
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout and update chart
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ inputs.branch }}
+          KEY: ${{ inputs.key }}
+          VALUE: ${{ inputs.value }}
+        shell: bash
+        run: |
+          set -xeo pipefail
+
+          git config --global --add safe.directory "$PWD"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Checkout the specified branch
+          git fetch origin "$BRANCH"
+          git checkout "$BRANCH"
+          
+          # Validate that VALUE contains required fields
+          REPO=$(echo "$VALUE" | jq -r '.repo // empty')
+          VERSION=$(echo "$VALUE" | jq -r '.version // empty')
+          
+          if [[ -z "$REPO" || -z "$VERSION" ]]; then
+            echo "Error: VALUE must contain both 'repo' and 'version' fields"
+            exit 1
+          fi
+          
+          # Update the helm chart to the provided value using jq
+          jq --arg chart "$KEY" --argjson value "$VALUE" '.helmCharts[$chart] = $value' build.json > build.json.tmp
+          mv build.json.tmp build.json
+          
+          # Commit and push with retry loop
+          git add build.json
+          git commit -m "Update $KEY to version $VERSION"
+          
+          # Retry loop for push conflicts
+          MAX_RETRIES=5
+          for attempt in $(seq 1 $MAX_RETRIES); do
+            if git push origin "$BRANCH"; then
+              echo "Successfully pushed on attempt $attempt"
+              break
+            else
+              if [[ $attempt -eq $MAX_RETRIES ]]; then
+                echo "Failed to push after $MAX_RETRIES attempts"
+                exit 1
+              fi
+              
+              echo "Push failed on attempt $attempt, retrying..."
+              
+              # Wait random time between 1-5 seconds
+              sleep_time=$((1 + RANDOM % 5))
+              echo "Waiting $sleep_time seconds..."
+              sleep $sleep_time
+              
+              # Pull latest changes and try to rebase
+              git pull --rebase origin "$BRANCH"
+            fi
+          done
