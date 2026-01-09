@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-zulu.3626",
+  "version": "1.0.0-zulu.3627",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -371,6 +371,14 @@
       "meta": {
         "commit": "ace92406c8117b3d36d3529f4133c876d67d3b03",
         "commitURL": "https://github.com/wireapp/helm-charts/commit/ace92406c8117b3d36d3529f4133c876d67d3b03"
+      }
+    },
+    "kube-prometheus-stack": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "0.1.5",
+      "meta": {
+        "commit": "a97d40cda870d6406797f948cb294c7eabbe9841",
+        "commitURL": "https://github.com/wireapp/helm-charts/commit/a97d40cda870d6406797f948cb294c7eabbe9841"
       }
     }
   }
