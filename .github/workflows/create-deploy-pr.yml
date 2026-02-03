@@ -13,32 +13,10 @@ on:
   workflow_dispatch:
     inputs:
       wire_server_version:
-        description: 'Pin wire-server version'
+        description: 'Pin wire-server version (e.g., 5.23.0) or leave empty to skip pinning'
         required: false
-        type: choice
-        options:
-          - 'none'
-          - '5.24.0'
-          - '5.23.0'
-          - '5.22.0'
-          - '5.21.0'
-          - '5.20.0'
-          - '5.19.0'
-          - '5.18.0'
-          - '5.17.0'
-          - '5.16.0'
-          - '5.15.0'
-          - '5.14.0'
-          - '5.13.0'
-          - '5.12.0'
-          - '5.11.0'
-          - '5.10.0'
-          - '5.9.0'
-          - '5.8.0'
-          - '5.7.0'
-          - '5.6.0'
-          - '5.5.0'
-        default: 'none'
+        type: string
+        default: ''
 
 jobs:
   create-deploy-pr:
@@ -54,7 +32,7 @@ jobs:
 
       - name: Pin wire-server version if specified
         id: pin-version
-        if: ${{ inputs.wire_server_version != 'none' && inputs.wire_server_version != '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.wire_server_version != '' }}
         run: |
           TAG_NAME=$(.github/scripts/pin-version.sh \
             --version "${{ inputs.wire_server_version }}" \
