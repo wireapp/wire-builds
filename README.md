@@ -39,29 +39,37 @@ gh run watch
 ```
 
 **How it works:**
-1. Workflow creates a temporary branch from the base branch (e.g., `offline`)
+1. Workflow creates an orphan branch (isolated, no history)
 2. Fetches the correct commit SHA from wire-server releases
 3. Updates all charts that match the current wire-server version to the pinned version
-4. Modifies root `build.json` with pinned versions
-5. Commits the changes and creates a Git tag: `pinned-<branch>-<version>`
-6. Pushes the tag to remote and deletes the temporary branch
+4. Places only the pinned `build.json` in the orphan branch
+5. Commits and creates a Git tag: `pinned-<branch>-<version>`
+6. Pushes the tag to remote and deletes the orphan branch
 7. Creates a PR to wire-server-deploy using the tag name
 
-**Important:** The root `build.json` on the base branch (e.g., `offline`) remains unchanged at the latest version. Pinned versions are accessible via Git tags (e.g., `pinned-offline-5.23.0`) and referenced by clean URLs.
+**Important:**
+- The base branch (e.g., `offline`) remains unchanged at the latest version
+- Pinned versions use orphan branches containing **only build.json** (no other files)
+- Tags point to these minimal commits for clean, lightweight version pinning
+- Accessible via clean URLs
 
 **Example after pinning to 5.23.0:**
 ```
 offline branch: build.json at 5.24.0 (unchanged)
-Git tag: pinned-offline-5.23.0 → points to commit with build.json at 5.23.0
+Git tag: pinned-offline-5.23.0 → orphan commit with only build.json at 5.23.0
 URL: https://raw.githubusercontent.com/wireapp/wire-builds/pinned-offline-5.23.0/build.json
 
-List all pinned versions:
+# List all pinned versions
 $ git tag -l 'pinned-offline-*'
 pinned-offline-5.23.0
 pinned-offline-5.22.0
+
+# Verify the tag contains only build.json
+$ git ls-tree pinned-offline-5.23.0
+100644 blob abc123... build.json
 ```
 
-**Available versions:** 5.24.0 down to 5.5.0
+**Note:** You can pin to any valid wire-server version (e.g., 5.24.0, 5.23.0, etc.). The workflow will fetch the corresponding commit SHA from wire-server releases.
 
 **Charts that get pinned together:**
 - wire-server, wire-server-enterprise

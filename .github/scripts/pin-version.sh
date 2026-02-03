@@ -144,7 +144,7 @@ update_chart() {
     fi
 }
 
-# Create temporary branch, commit pinned build.json, tag it, and push tag
+# Create orphan branch with only build.json, tag it, and push tag
 commit_and_push() {
     local current_version="$1"
     local pinned_version="$2"
@@ -155,15 +155,15 @@ commit_and_push() {
     local temp_branch="temp-pin-${pinned_version}"
     local tag_name="pinned-${base_branch}-${pinned_version}"
 
-    log_info "Creating temporary branch: $temp_branch"
+    log_info "Creating orphan branch with only build.json: $temp_branch"
 
-    # Ensure we're on base branch
-    git checkout "$base_branch"
+    # Create orphan branch (no parent commit, clean history)
+    git checkout --orphan "$temp_branch"
 
-    # Create temp branch
-    git checkout -b "$temp_branch"
+    # Remove all files from staging area
+    git rm -rf . >/dev/null 2>&1 || true
 
-    # Replace root build.json with pinned version
+    # Add only the pinned build.json
     cp "$source_build_file" build.json
 
     log_info "Committing pinned build.json..."
@@ -179,6 +179,8 @@ $charts
 
 Base branch: $base_branch
 Tag: $tag_name
+
+This is an orphan branch containing only build.json for the pinned version.
 EOF
 
     git commit -F /tmp/pin-commit-msg.txt
@@ -200,7 +202,7 @@ EOF
     git push origin "$tag_name"
 
     # Switch back to base branch and delete temp branch
-    log_info "Cleaning up temporary branch"
+    log_info "Cleaning up orphan branch"
     git checkout "$base_branch"
     git branch -D "$temp_branch"
 

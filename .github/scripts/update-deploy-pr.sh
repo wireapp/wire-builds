@@ -8,8 +8,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
 
 # Constants
-readonly BRANCH_NAME="auto/bump-wire-build"
 readonly SCRIPT_FILE="offline/tasks/proc_pull_charts.sh"
+# Branch name will be set dynamically based on whether it's a pinned version
 
 # Usage information
 usage() {
@@ -85,6 +85,21 @@ parse_args() {
 
     if [ ! -d "$DEPLOY_DIR" ]; then
         die "Deploy directory not found: $DEPLOY_DIR"
+    fi
+}
+
+# Determine branch name based on the ref
+get_branch_name() {
+    local ref="$1"
+
+    # Check if ref is a pinned tag (format: pinned-<branch>-<version>)
+    if [[ "$ref" =~ ^pinned-([^-]+)-([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+        local base_branch="${BASH_REMATCH[1]}"
+        local version="${BASH_REMATCH[2]}"
+        echo "auto/pin-${base_branch}-${version}"
+    else
+        # For regular commits, use the standard branch name
+        echo "auto/bump-wire-build"
     fi
 }
 
