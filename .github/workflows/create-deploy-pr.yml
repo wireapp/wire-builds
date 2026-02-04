@@ -34,10 +34,11 @@ jobs:
         id: pin-version
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.wire_server_version != '' }}
         run: |
+          set -euo pipefail
           TAG_NAME=$(.github/scripts/pin-version.sh \
             --version "${{ inputs.wire_server_version }}" \
             --file build.json \
-            --base-branch "${{ github.ref_name }}" | tail -1)
+            --base-branch "${{ github.ref_name }}")
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "Pinned tag: $TAG_NAME"
 
