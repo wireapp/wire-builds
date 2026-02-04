@@ -113,23 +113,6 @@ $ git ls-tree pinned-offline-5.23.0
 2. Commit and push to the `offline` branch
 3. Workflow automatically creates a PR in wire-server-deploy
 
-### Adding New Wire-Server Versions
-
-When a new wire-server version is released, edit [.github/workflows/create-deploy-pr.yml](.github/workflows/create-deploy-pr.yml) and add the version to the `options` list:
-
-```yaml
-wire_server_version:
-  description: 'Pin wire-server version'
-  required: false
-  type: choice
-  options:
-    - 'none'
-    - '5.25.0'  # New version
-    - '5.24.0'
-    - '5.23.0'
-    # ... rest of versions
-```
-
 ### Checking Workflow Status
 
 ```bash
@@ -145,16 +128,22 @@ gh run view <run-id> --log
 
 ### After Merging PRs in wire-server-deploy
 
-The workflow reuses the same branch name (`auto/bump-wire-build`) for all PRs. After you merge a PR:
+The workflow uses different branch naming strategies:
 
-**What happens on next trigger:**
-1. Workflow fetches the existing `auto/bump-wire-build` branch
-2. Attempts to rebase it on master (which includes the merged changes)
-3. If rebase succeeds: updates the branch and creates a new PR
-4. If rebase fails: deletes and recreates the branch from master
+| Trigger | Branch Name | Behavior |
+|---------|-------------|----------|
+| Automatic (push to `build.json`) | `auto/bump-wire-build` | Reused for all automatic updates |
+| Pinned version (workflow_dispatch) | `auto/pin-<branch>-<version>` | Unique per pinned version |
 
-**Best practice:**
-Delete the `auto/bump-wire-build` branch in wire-server-deploy after merging to ensure clean PR history:
+**For automatic updates (`auto/bump-wire-build`):**
+
+After you merge a PR, the next trigger will:
+1. Fetch the existing `auto/bump-wire-build` branch
+2. Attempt to rebase it on master (which includes the merged changes)
+3. If rebase succeeds: update the branch and create a new PR
+4. If rebase fails: delete and recreate the branch from master
+
+**Best practice:** Delete the `auto/bump-wire-build` branch after merging to ensure clean PR history:
 
 ```bash
 # Delete the branch after merging
@@ -162,7 +151,11 @@ cd wire-server-deploy
 git push origin --delete auto/bump-wire-build
 ```
 
-Or use the GitHub UI to enable "Automatically delete head branches" in repository settings.
+Or enable "Automatically delete head branches" in GitHub repository settings.
+
+**For pinned versions (`auto/pin-*`):**
+
+Each pinned version gets its own unique branch (e.g., `auto/pin-offline-5.23.0`), so there's no conflict between different pinned versions.
 
 ## Troubleshooting
 
