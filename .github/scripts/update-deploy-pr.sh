@@ -337,6 +337,10 @@ main() {
     log_info "New URL: $new_url"
     echo ""
 
+    # Determine branch name based on ref type
+    BRANCH_NAME=$(get_branch_name "$BUILD_REF")
+    log_info "Branch name: $BRANCH_NAME"
+
     # Manage branch
     manage_branch
     echo ""
