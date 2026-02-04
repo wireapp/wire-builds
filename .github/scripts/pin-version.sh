@@ -192,9 +192,13 @@ EOF
     log_info "Creating and pushing tag: $tag_name"
 
     # Delete tag if it exists (for re-pinning same version)
+    if git tag -l "$tag_name" | grep -q "$tag_name"; then
+        log_warning "Local tag $tag_name already exists, deleting..."
+        git tag -d "$tag_name" >&2 || true
+    fi
     if git ls-remote --tags origin | grep -q "refs/tags/$tag_name"; then
-        log_warning "Tag $tag_name already exists, deleting..."
-        git push origin --delete "$tag_name" || true
+        log_warning "Remote tag $tag_name already exists, deleting..."
+        git push origin --delete "$tag_name" >&2 || true
     fi
 
     # Create and push tag
