@@ -158,7 +158,7 @@ commit_and_push() {
     log_info "Creating orphan branch with only build.json: $temp_branch"
 
     # Create orphan branch (no parent commit, clean history)
-    git checkout --orphan "$temp_branch"
+    git checkout --orphan "$temp_branch" >&2
 
     # Remove all files from staging area
     git rm -rf . >/dev/null 2>&1 || true
@@ -183,7 +183,7 @@ Tag: $tag_name
 This is an orphan branch containing only build.json for the pinned version.
 EOF
 
-    git commit -F /tmp/pin-commit-msg.txt
+    git commit -F /tmp/pin-commit-msg.txt >&2
     rm -f /tmp/pin-commit-msg.txt
 
     local commit_sha
@@ -199,12 +199,12 @@ EOF
 
     # Create and push tag
     git tag "$tag_name" "$commit_sha"
-    git push origin "$tag_name"
+    git push origin "$tag_name" >&2
 
     # Switch back to base branch and delete temp branch
     log_info "Cleaning up orphan branch"
-    git checkout "$base_branch"
-    git branch -D "$temp_branch"
+    git checkout "$base_branch" >&2
+    git branch -D "$temp_branch" >&2
 
     log_success "Version pinning complete!"
     log_success "Tag: $tag_name"
@@ -220,7 +220,7 @@ main() {
     parse_args "$@"
 
     log_info "Pinning wire-server and related charts to version $PINNED_VERSION"
-    echo ""
+    echo "" >&2
 
     # Create a temporary working file
     local temp_build_file="/tmp/build-pinned-$PINNED_VERSION.json"
@@ -233,37 +233,37 @@ main() {
     current_version=$(get_current_version)
     log_info "Current wire-server version: $current_version"
     log_info "Target wire-server version: $PINNED_VERSION"
-    echo ""
+    echo "" >&2
 
     # Fetch commit metadata
     local metadata
     metadata=$(fetch_commit_metadata "$PINNED_VERSION")
     local commit_sha="${metadata%%|*}"
     local commit_url="${metadata##*|}"
-    echo ""
+    echo "" >&2
 
     # Find charts to update
     log_info "Finding charts with version $current_version..."
     local charts
     charts=$(find_charts_to_update "$current_version")
     log_info "Charts to update: $charts"
-    echo ""
+    echo "" >&2
 
     # Update each chart
     log_info "Updating charts..."
     for chart in $charts; do
         update_chart "$chart" "$PINNED_VERSION" "$commit_sha" "$commit_url"
     done
-    echo ""
+    echo "" >&2
 
     # Show summary
     log_info "Summary of pinned charts:"
     for chart in $charts; do
         local version
         version=$(json_get "$BUILD_FILE" ".helmCharts[\"$chart\"].version")
-        echo "  $chart: $version"
+        echo "  $chart: $version" >&2
     done
-    echo ""
+    echo "" >&2
 
     # Commit and push (returns commit SHA and file path)
     commit_and_push "$current_version" "$PINNED_VERSION" "$charts" "$BASE_BRANCH" "$temp_build_file"
