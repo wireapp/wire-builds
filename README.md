@@ -13,17 +13,25 @@ The workflow automatically creates or updates pull requests in the [wire-server-
 
 ### Triggers
 
-1. **Push to `offline` branch** when `build.json` is modified
-2. **Pull requests** that modify `build.json`
-3. **Manual dispatch (CLI)** with optional wire-server version pinning
+1. **Push to `main` branch** when `build.json` is modified - automatically syncs to `offline` branch
+2. **Push to `offline` branch** when `build.json` is modified
+3. **Pull requests** that modify `build.json`
+4. **Manual dispatch (CLI)** with optional wire-server version pinning
 
 ### Features
 
-#### Automatic PR Creation
+#### Automatic Build Sync and PR Creation
 
-When `build.json` is updated on the `offline` branch, the workflow:
-1. Updates the wire-build URL in `wire-server-deploy/offline/tasks/proc_pull_charts.sh`
-2. Creates/updates a PR in wire-server-deploy with version details and commit links
+When `build.json` is updated on the `main` branch:
+1. The `sync-build-json.yml` workflow automatically syncs it to the `offline` branch
+2. This triggers the `create-deploy-pr.yml` workflow, which:
+   - Updates the wire-build URL in `wire-server-deploy/offline/tasks/proc_pull_charts.sh`
+   - Creates/updates a PR in wire-server-deploy with version details and commit links
+   - Uses branch name: `auto/wire-server-version-bump`
+
+When `build.json` is updated directly on the `offline` branch (manual changes):
+1. The `create-deploy-pr.yml` workflow triggers directly
+2. Updates wire-server-deploy and creates a PR (same as above)
 
 #### Wire-Server Version Pinning (CLI)
 
@@ -105,12 +113,37 @@ $ git ls-tree pinned-offline-5.23.0
 - `meta.commit`: Git commit SHA for this chart version
 - `meta.commitURL`: Direct link to the commit on GitHub
 
+## Workflow Chain
+
+When `build.json` is updated on the `main` branch, a two-step workflow chain executes:
+
+```
+main: build.json updated
+  ↓
+sync-build-json.yml workflow triggers
+  ↓
+Syncs build.json to offline branch
+  ↓
+create-deploy-pr.yml workflow triggers
+  ↓
+Creates PR in wire-server-deploy
+```
+
+This ensures that production-ready versions on `main` are automatically propagated to the offline deployment configuration.
+
 ## Common Operations
 
 ### Updating Chart Versions
 
-1. Modify `build.json` with new chart versions
-2. Commit and push to the `offline` branch
+**Option 1: Update main branch (recommended for production versions)**
+1. Modify `build.json` with new chart versions on `main` branch
+2. Commit and push to `main`
+3. Sync workflow automatically updates `offline` branch
+4. PR creation workflow automatically creates a PR in wire-server-deploy
+
+**Option 2: Update offline branch directly (for testing or offline-specific changes)**
+1. Modify `build.json` with new chart versions on `offline` branch
+2. Commit and push to `offline`
 3. Workflow automatically creates a PR in wire-server-deploy
 
 ### Checking Workflow Status
@@ -132,23 +165,23 @@ The workflow uses different branch naming strategies:
 
 | Trigger | Branch Name | Behavior |
 |---------|-------------|----------|
-| Automatic (push to `build.json`) | `auto/bump-wire-build` | Reused for all automatic updates |
+| Automatic (sync from `main`) | `auto/wire-server-version-bump` | Reused for all automatic version bumps |
 | Pinned version (workflow_dispatch) | `auto/pin-<branch>-<version>` | Unique per pinned version |
 
-**For automatic updates (`auto/bump-wire-build`):**
+**For automatic updates (`auto/wire-server-version-bump`):**
 
 After you merge a PR, the next trigger will:
-1. Fetch the existing `auto/bump-wire-build` branch
+1. Fetch the existing `auto/wire-server-version-bump` branch
 2. Attempt to rebase it on master (which includes the merged changes)
 3. If rebase succeeds: update the branch and create a new PR
 4. If rebase fails: delete and recreate the branch from master
 
-**Best practice:** Delete the `auto/bump-wire-build` branch after merging to ensure clean PR history:
+**Best practice:** Delete the `auto/wire-server-version-bump` branch after merging to ensure clean PR history:
 
 ```bash
 # Delete the branch after merging
 cd wire-server-deploy
-git push origin --delete auto/bump-wire-build
+git push origin --delete auto/wire-server-version-bump
 ```
 
 Or enable "Automatically delete head branches" in GitHub repository settings.

@@ -22,6 +22,8 @@ OPTIONS:
     -r, --ref REF            Git reference (commit SHA or tag name) (required)
     -d, --deploy-dir DIR     Path to wire-server-deploy directory (required)
     -t, --token TOKEN        GitHub token for creating PRs (required)
+    -b, --source-branch BRANCH  Source branch name (main/offline) (optional, default: offline)
+    -T, --target-branch BRANCH  Target branch in wire-server-deploy (optional, default: master)
     -h, --help               Show this help message
 
 ENVIRONMENT:
@@ -32,6 +34,7 @@ ENVIRONMENT:
 EXAMPLE:
     $0 --ref abc123 --deploy-dir ./wire-server-deploy --token \$ZEBOT_TOKEN
     $0 --ref pinned-offline-5.23.0 --deploy-dir ./wire-server-deploy --token \$ZEBOT_TOKEN
+    $0 --ref abc123 --deploy-dir ./wire-server-deploy --token \$ZEBOT_TOKEN --source-branch main --target-branch develop
 
 EOF
     exit 1
@@ -98,8 +101,8 @@ get_branch_name() {
         local version="${BASH_REMATCH[2]}"
         echo "auto/pin-${base_branch}-${version}"
     else
-        # For regular commits, use the standard branch name
-        echo "auto/bump-wire-build"
+        # For regular commits, use version-bump branch name
+        echo "auto/wire-server-version-bump"
     fi
 }
 

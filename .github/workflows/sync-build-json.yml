@@ -1,0 +1,69 @@
+name: Sync build.json from main to offline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'build.json'
+
+jobs:
+  sync-to-offline:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: offline
+          token: ${{ secrets.ZEBOT_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "zebot"
+          git config user.email "zebot@users.noreply.github.com"
+
+      - name: Get build.json from main
+        run: |
+          git fetch origin main
+          git checkout origin/main -- build.json
+
+      - name: Check if there are changes
+        id: check-changes
+        run: |
+          if git diff --quiet HEAD build.json; then
+            echo "No changes to sync"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          git add build.json
+
+          # Get the commit message from the main branch's latest commit that changed build.json
+          git fetch origin main
+          COMMIT_MSG=$(git log origin/main -1 --format=%B -- build.json)
+          COMMIT_AUTHOR=$(git log origin/main -1 --format="%an" -- build.json)
+          COMMIT_EMAIL=$(git log origin/main -1 --format="%ae" -- build.json)
+
+          # Use the original author for the commit
+          git config user.name "$COMMIT_AUTHOR"
+          git config user.email "$COMMIT_EMAIL"
+
+          # Commit with the same message as main
+          git commit -m "$COMMIT_MSG"
+
+          git push origin offline
+
+      - name: Summary
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          echo "✅ build.json synced from main to offline"
+          echo "   The create-deploy-pr workflow will be triggered next"
