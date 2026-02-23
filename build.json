@@ -10,12 +10,20 @@
         "commit": "3b736fc938c7b233df4be200f9015386cf962b9a"
       }
     },
+    "coturn": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "4.6.2-federation-wireapp.43",
+      "meta": {
+        "commit": "93fca851fad09ad3cea2fedd12c34ed90b215b45",
+        "commitURL": "https://github.com/wireapp/coturn/commit/93fca851fad09ad3cea2fedd12c34ed90b215b45"
+      }
+    },
     "sftd": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-avs",
-      "version": "0.47.0",
+      "version": "0.130.0",
       "meta": {
-        "appVersion": "4.1.17",
-        "commit": "daa40a8"
+        "appVersion": "5.0.60",
+        "commit": "60165de"
       }
     },
     "wire-server": {
@@ -216,14 +224,6 @@
       "meta": {
         "commit": "63d78de17b944156b9fdddaa0bff48d488bdd8e0",
         "commitURL": "https://github.com/wireapp/wire-server/commit/63d78de17b944156b9fdddaa0bff48d488bdd8e0"
-      }
-    },
-    "coturn": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "4.6.2-federation-wireapp.18",
-      "meta": {
-        "commit": "351ec052672a5524b9087661df0ef2ff4116e190",
-        "commitURL": "https://github.com/wireapp/coturn/commit/351ec052672a5524b9087661df0ef2ff4116e190"
       }
     },
     "inbucket": {
