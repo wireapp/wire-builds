@@ -166,6 +166,91 @@ generate_changelog() {
     fi
 }
 
+# Get chart version from Helm chart index by searching for appVersion
+# Usage: get_chart_by_appversion <chart_name> <index_url> <github_repo> <appversion_search>
+# Returns: chart_version|commit_sha|commit_url|app_version
+# Example: get_chart_by_appversion "webapp" "https://...charts-webapp/index.yaml" "wireapp/wire-webapp" "2025-12-10-production.0"
+get_chart_by_appversion() {
+    local chart_name="$1"
+    local index_url="$2"
+    local github_repo="$3"
+    local search_pattern="$4"
+
+    local temp_yaml="/tmp/${chart_name}-index-$$.yaml"
+
+    log_info "Fetching $chart_name chart index from: $index_url"
+    if ! download_with_retry "$index_url" "$temp_yaml"; then
+        rm -f "$temp_yaml"
+        return 1
+    fi
+
+    log_info "Searching for $chart_name chart with appVersion matching: $search_pattern"
+
+    # Parse YAML to find chart with matching appVersion
+    local chart_info
+    if command -v yq &> /dev/null; then
+        # Use yq if available (more reliable)
+        chart_info=$(yq eval ".entries[\"${chart_name}\"][] | select(.appVersion | test(\"^${search_pattern}\")) | .version + \"|\" + (.appVersion // \"\")" "$temp_yaml" 2>/dev/null | head -1)
+    else
+        # Fallback: use awk for basic YAML parsing
+        chart_info=$(awk -v chart="$chart_name" -v pattern="$search_pattern" '
+            BEGIN { in_chart = 0 }
+            $0 ~ "^  " chart ":" { in_chart = 1; next }
+            in_chart && /^  [a-z]/ { in_chart = 0 }
+            in_chart && /^  - appVersion:/ {
+                app_version = $3
+                # Read ahead to find version
+                while (getline > 0) {
+                    if ($1 == "version:") {
+                        version = $2
+                        # Check if appVersion starts with pattern
+                        if (index(app_version, pattern) == 1) {
+                            print version "|" app_version
+                            exit
+                        }
+                        break
+                    }
+                    if ($0 ~ /^  - /) break
+                }
+            }
+        ' "$temp_yaml")
+    fi
+
+    if [ -z "$chart_info" ]; then
+        log_warning "No chart found with appVersion matching: $search_pattern"
+        rm -f "$temp_yaml"
+        return 1
+    fi
+
+    local chart_version="${chart_info%%|*}"
+    local app_version="${chart_info##*|}"
+
+    log_success "Found $chart_name chart version: $chart_version (appVersion: $app_version)"
+
+    # Extract commit SHA from appVersion (typically at the end: ...-vX.Y.Z-commit_sha)
+    # Use sed for reliable extraction (BASH_REMATCH has issues with set -u)
+    local commit_sha=""
+    commit_sha=$(echo "$app_version" | sed -E 's/.*-([a-f0-9]{7,})$/\1/' | grep -E '^[a-f0-9]{7,}$' || echo "")
+
+    # Get full commit SHA and URL from GitHub if we have a short SHA
+    local full_commit_sha=""
+    local commit_url=""
+    if [ -n "$commit_sha" ] && [ -n "$github_repo" ]; then
+        log_info "Looking up full commit SHA for: $commit_sha in $github_repo"
+        # Fetch directly and extract SHA
+        local api_url="https://api.github.com/repos/${github_repo}/commits/$commit_sha"
+        if full_commit_sha=$(curl -sf "$api_url" | jq -r '.sha // empty' 2>/dev/null) && [ -n "$full_commit_sha" ]; then
+            commit_url="https://github.com/${github_repo}/commit/$full_commit_sha"
+            log_success "Commit: ${full_commit_sha:0:7}"
+        else
+            log_warning "Could not fetch full commit SHA from GitHub"
+        fi
+    fi
+
+    rm -f "$temp_yaml"
+    echo "${chart_version}|${full_commit_sha}|${commit_url}|${app_version}"
+}
+
 # Ensure required commands are available
 check_prerequisites() {
     require_command jq

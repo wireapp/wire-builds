@@ -33,10 +33,11 @@ When `build.json` is updated directly on the `offline` branch (manual changes):
 1. The `create-deploy-pr.yml` workflow triggers directly
 2. Updates wire-server-deploy and creates a PR (same as above)
 
-#### Wire-Server Version Pinning (CLI)
+#### Version Pinning (CLI)
 
-Pin wire-server and all related charts to a specific version using GitHub CLI:
+Pin wire-server and/or individual charts to specific versions using GitHub CLI:
 
+**Pin wire-server and all related charts:**
 ```bash
 gh workflow run create-deploy-pr.yml \
   --ref offline \
@@ -46,13 +47,54 @@ gh workflow run create-deploy-pr.yml \
 gh run watch
 ```
 
+**Pin individual charts (webapp, account-pages, etc.):**
+```bash
+# Pin webapp to a specific release tag
+gh workflow run create-deploy-pr.yml \
+  --ref offline \
+  -f pin_charts="webapp:2025-12-10-production.0:charts-webapp:wireapp/wire-webapp"
+```
+
+**Pin both wire-server and webapp together:**
+```bash
+gh workflow run create-deploy-pr.yml \
+  --ref offline \
+  -f wire_server_version=5.25.0 \
+  -f pin_charts="webapp:2025-12-10-production.0:charts-webapp:wireapp/wire-webapp"
+```
+
+**Pin multiple individual charts:**
+```bash
+# Comma-separated list for multiple charts
+gh workflow run create-deploy-pr.yml \
+  --ref offline \
+  -f pin_charts="webapp:2025-12-10-production.0:charts-webapp:wireapp/wire-webapp,account-pages:2.9.0:charts-webapp:wireapp/account-pages"
+```
+
+**Chart spec format:** `chart:release:repo:github_repo`
+- `chart`: Chart name (e.g., webapp, account-pages)
+- `release`: Release tag to pin to (e.g., 2025-12-10-production.0)
+- `repo`: Helm chart repo name (e.g., charts-webapp, charts)
+- `github_repo`: GitHub repository for commit lookup (e.g., wireapp/wire-webapp)
+
 **How it works:**
+
+*For wire-server pinning:*
 1. Workflow creates an orphan branch (isolated, no history)
 2. Fetches the correct commit SHA from wire-server releases
 3. Updates all charts that match the current wire-server version to the pinned version
 4. Places only the pinned `build.json` in the orphan branch
 5. Commits and creates a Git tag: `pinned-<branch>-<version>`
 6. Pushes the tag to remote and deletes the orphan branch
+7. Creates a PR to wire-server-deploy using the tag name
+
+*For individual chart pinning (webapp, account-pages, etc.):*
+1. Workflow creates an orphan branch
+2. Fetches the Helm chart index from S3
+3. Searches for chart version by matching the release tag in `appVersion` field
+4. Extracts commit SHA from `appVersion` and looks up full commit from GitHub
+5. Updates the chart with version, commit, commitURL, and appVersion in build.json
+6. Creates a Git tag based on the charts pinned
 7. Creates a PR to wire-server-deploy using the tag name
 
 **Important:**

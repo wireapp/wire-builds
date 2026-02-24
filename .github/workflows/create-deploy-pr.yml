@@ -17,6 +17,11 @@ on:
         required: false
         type: string
         default: ''
+      pin_charts:
+        description: 'Pin individual charts (format: chart:release:repo:github_repo, comma-separated for multiple)'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   create-deploy-pr:
@@ -30,15 +35,33 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Pin wire-server version if specified
+      - name: Pin versions if specified
         id: pin-version
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.wire_server_version != '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && (inputs.wire_server_version != '' || inputs.pin_charts != '') }}
         run: |
           set -euo pipefail
-          TAG_NAME=$(.github/scripts/pin-version.sh \
-            --version "${{ inputs.wire_server_version }}" \
-            --file build.json \
-            --base-branch "${{ github.ref_name }}")
+
+          # Build command with optional parameters
+          CMD=".github/scripts/pin-version.sh --file build.json --base-branch \"${{ github.ref_name }}\""
+
+          # Add wire-server version if specified
+          if [ -n "${{ inputs.wire_server_version }}" ]; then
+            CMD="$CMD --version \"${{ inputs.wire_server_version }}\""
+          fi
+
+          # Add chart pins if specified
+          if [ -n "${{ inputs.pin_charts }}" ]; then
+            # Split comma-separated list and add each as --pin-chart
+            IFS=',' read -ra CHARTS <<< "${{ inputs.pin_charts }}"
+            for chart_spec in "${CHARTS[@]}"; do
+              # Trim whitespace
+              chart_spec=$(echo "$chart_spec" | xargs)
+              CMD="$CMD --pin-chart \"$chart_spec\""
+            done
+          fi
+
+          echo "Running: $CMD"
+          TAG_NAME=$(eval "$CMD")
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "Pinned tag: $TAG_NAME"
 
