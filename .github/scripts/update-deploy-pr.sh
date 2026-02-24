@@ -95,11 +95,21 @@ parse_args() {
 get_branch_name() {
     local ref="$1"
 
-    # Check if ref is a pinned tag (format: pinned-<branch>-<version>)
+    # Check if ref is a pinned tag with single version (format: pinned-<branch>-<version>)
     if [[ "$ref" =~ ^pinned-([^-]+)-([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
         local base_branch="${BASH_REMATCH[1]}"
         local version="${BASH_REMATCH[2]}"
         echo "auto/pin-${base_branch}-${version}"
+    # Check if ref is a multi-chart pinned tag (format: pinned-<branch>-multi-<timestamp>)
+    elif [[ "$ref" =~ ^pinned-([^-]+)-multi-(.+)$ ]]; then
+        local base_branch="${BASH_REMATCH[1]}"
+        local timestamp="${BASH_REMATCH[2]}"
+        echo "auto/pin-${base_branch}-multi-${timestamp}"
+    # Check if ref is a single chart pinned tag (format: pinned-<branch>-<chart>-<release>)
+    elif [[ "$ref" =~ ^pinned-([^-]+)-([^-]+)-.+$ ]]; then
+        # Use the full tag name after "pinned-"
+        local branch_suffix="${ref#pinned-}"
+        echo "auto/pin-${branch_suffix}"
     else
         # For regular commits, use version-bump branch name
         echo "auto/wire-server-version-bump"
