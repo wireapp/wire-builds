@@ -188,6 +188,32 @@ This ensures that production-ready versions on `main` are automatically propagat
 2. Commit and push to `offline`
 3. Workflow automatically creates a PR in wire-server-deploy
 
+### Manual Sync From main To offline
+
+If you need to manually copy the current `build.json` from `main` into `offline`, use:
+
+```bash
+.github/scripts/sync-build-json.sh
+```
+
+This script:
+1. Fetches the latest refs from `origin`
+2. Resets local `offline` to `origin/offline`
+3. Copies `build.json` from `origin/main`
+4. Reuses the latest `build.json` commit message and author from the source ref
+5. Commits the change on `offline`
+6. Pushes `offline` to `origin`
+
+Useful variants:
+
+```bash
+# Preview by committing locally without pushing
+.github/scripts/sync-build-json.sh --no-push
+
+# Sync from a specific source ref
+.github/scripts/sync-build-json.sh --source-ref 69988e5
+```
+
 ### Checking Workflow Status
 
 ```bash
