@@ -101,7 +101,7 @@ sync_build_file() {
     log_info "Copying $BUILD_FILE from $SOURCE_REF"
     git checkout "$SOURCE_REF" -- "$BUILD_FILE"
 
-    if git diff --quiet -- "$BUILD_FILE"; then
+    if git diff --cached --quiet -- "$BUILD_FILE"; then
         log_info "No changes detected. $BUILD_FILE already matches $SOURCE_REF"
         if [ "$original_branch" != "$TARGET_BRANCH" ]; then
             git checkout "$original_branch"
@@ -114,10 +114,8 @@ sync_build_file() {
     commit_email=$(git log "$SOURCE_REF" -1 --format=%ae -- "$BUILD_FILE")
 
     log_info "Committing synced $BUILD_FILE"
-    git config user.name "$commit_author"
-    git config user.email "$commit_email"
     git add "$BUILD_FILE"
-    git commit -m "$commit_msg"
+    git -c user.name="$commit_author" -c user.email="$commit_email" commit -m "$commit_msg"
 
     if [ "$SHOULD_PUSH" = "true" ]; then
         log_info "Pushing $TARGET_BRANCH to origin"
