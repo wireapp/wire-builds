@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #
-# Usage: GITHUB_USER=<user> GITHUB_TOKEN=<pat> ./bin/publish-oci-chart [chart-name [version]]
+# Usage: REGISTRY_USER=<user> REGISTRY_TOKEN=<token> ./bin/publish-oci-chart [chart-name [version]]
 #
-# Publishes Helm charts from build.json to GitHub Container Registry as OCI charts.
+# Publishes Helm charts from build.json to an OCI registry.
 # Charts to publish are listed in oci-charts.txt (one chart name per line).
 # Charts already present in the registry at the current version are skipped.
 #
@@ -11,23 +11,29 @@
 # With a chart name, processes that single chart regardless of oci-charts.txt.
 # With a chart name and version, skips the existence check and force-publishes.
 #
+# Environment variables:
+#   REGISTRY_USER   Registry username (required)
+#   REGISTRY_TOKEN  Registry password / token (required)
+#   OCI_REGISTRY    Full registry path (default: quay.io/wire/charts)
+#
 # Requires: helm >= 3.8, jq
 
 set -euo pipefail
 
-GITHUB_USER=${GITHUB_USER:?"Set GITHUB_USER environment variable"}
-GITHUB_TOKEN=${GITHUB_TOKEN:?"Set GITHUB_TOKEN environment variable"}
+REGISTRY_USER=${REGISTRY_USER:?"Set REGISTRY_USER environment variable"}
+REGISTRY_TOKEN=${REGISTRY_TOKEN:?"Set REGISTRY_TOKEN environment variable"}
+OCI_REGISTRY=${OCI_REGISTRY:-"quay.io/wire/charts"}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_JSON="${SCRIPT_DIR}/../build.json"
 CHARTS_LIST="${SCRIPT_DIR}/../oci-charts.txt"
 
-OCI_REGISTRY="ghcr.io/${GITHUB_USER}/wire-charts"
+REGISTRY_HOST="${OCI_REGISTRY%%/*}"
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-echo "Logging into ghcr.io ..."
-echo "$GITHUB_TOKEN" | helm registry login ghcr.io -u "$GITHUB_USER" --password-stdin
+echo "Logging into ${REGISTRY_HOST} ..."
+echo "$REGISTRY_TOKEN" | helm registry login "$REGISTRY_HOST" -u "$REGISTRY_USER" --password-stdin
 
 publish_chart() {
   local chart_name=$1
