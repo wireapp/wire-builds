@@ -26,8 +26,6 @@ WIRE_CHANNEL=${WIRE_CHANNEL:?"Set WIRE_CHANNEL environment variable"}
 WIRE_BUILD_JSON=${WIRE_BUILD_JSON:?"Set WIRE_BUILD_JSON environment variable"}
 OCI_REGISTRY=${OCI_REGISTRY:-"quay.io/wire/${WIRE_CHANNEL}/charts"}
 
-BUILD_JSON="$WIRE_BUILD_JSON"
-
 REGISTRY_HOST="${OCI_REGISTRY%%/*}"
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
@@ -59,7 +57,7 @@ publish_chart() {
   local force_version=${2:-}
 
   local version
-  version=$(jq -r ".helmCharts[\"${chart_name}\"].version" "$BUILD_JSON")
+  version=$(jq -r ".helmCharts[\"${chart_name}\"].version" "$WIRE_BUILD_JSON")
 
   # Overwrite version if force_version is provided
   if [[ -n "$force_version" ]]; then
@@ -67,7 +65,7 @@ publish_chart() {
   fi
 
   local repo
-  repo=$(jq -r ".helmCharts[\"${chart_name}\"].repo" "$BUILD_JSON")
+  repo=$(jq -r ".helmCharts[\"${chart_name}\"].repo" "$WIRE_BUILD_JSON")
 
   if [[ "$version" == "null" || "$repo" == "null" ]]; then
     echo "  SKIP: ${chart_name} not found in build.json"
