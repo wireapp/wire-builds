@@ -7,7 +7,7 @@
 # Charts already present in the registry at the current version are skipped.
 #
 # With a chart name, publishes that chart.
-# With a chart name and version, skips the existence check and force-publishes.
+# With a chart name and version, uses the override version instead of build.json.
 #
 # Environment variables:
 #   REGISTRY_USER   Registry username (required)
@@ -73,7 +73,7 @@ publish_chart() {
     return
   fi
 
-  if [[ -z "$force_version" ]] && helm show chart "oci://${OCI_REGISTRY}/${chart_name}" --version "$version" &>/dev/null; then
+  if helm show chart "oci://${OCI_REGISTRY}/${chart_name}" --version "$version" &>/dev/null; then
     echo "  SKIP: ${chart_name}:${version} already exists in registry"
     return
   fi
