@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
 #
-# Usage: REGISTRY_USER=<user> REGISTRY_TOKEN=<token> ./bin/publish-oci-chart [chart-name [version]]
+# Usage: REGISTRY_USER=<user> REGISTRY_TOKEN=<token> WIRE_CHANNEL=<channel> ./bin/publish-oci-chart <chart-name> [version]
 #
-# Publishes Helm charts from build.json to an OCI registry.
-# Charts to publish are listed in oci-charts.txt (one chart name per line).
+# Publishes a Helm chart from build.json to an OCI registry.
 # Charts already present in the registry at the current version are skipped.
 #
-# With no arguments, processes all charts in oci-charts.txt.
-# With a chart name, processes that single chart regardless of oci-charts.txt.
+# With a chart name, publishes that chart.
 # With a chart name and version, skips the existence check and force-publishes.
 #
 # Environment variables:
 #   REGISTRY_USER   Registry username (required)
 #   REGISTRY_TOKEN  Registry password / token (required)
-#   OCI_REGISTRY    Full registry path (default: quay.io/wire/charts)
+#   WIRE_CHANNEL    Release channel (required)
+#   OCI_REGISTRY    Full registry path (default: quay.io/wire/${WIRE_CHANNEL}/charts)
 #
 # Requires: helm >= 3.8, jq
 
@@ -22,25 +21,50 @@ set -euo pipefail
 
 REGISTRY_USER=${REGISTRY_USER:?"Set REGISTRY_USER environment variable"}
 REGISTRY_TOKEN=${REGISTRY_TOKEN:?"Set REGISTRY_TOKEN environment variable"}
-OCI_REGISTRY=${OCI_REGISTRY:-"quay.io/wire/charts"}
+WIRE_CHANNEL=${WIRE_CHANNEL:?"Set WIRE_CHANNEL environment variable"}
+OCI_REGISTRY=${OCI_REGISTRY:-"quay.io/wire/${WIRE_CHANNEL}/charts"}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_JSON="${SCRIPT_DIR}/../build.json"
-CHARTS_LIST="${SCRIPT_DIR}/../oci-charts.txt"
 
 REGISTRY_HOST="${OCI_REGISTRY%%/*}"
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-echo "Logging into ${REGISTRY_HOST} ..."
-echo "$REGISTRY_TOKEN" | helm registry login "$REGISTRY_HOST" -u "$REGISTRY_USER" --password-stdin
+push_with_auth_retry() {
+  local chart_path=$1
+  local registry=$2
+  local output
+  local exit_code
+
+  output=$(helm push "$chart_path" "oci://${registry}" 2>&1) || exit_code=$?
+  echo "$output"
+
+  if [[ ${exit_code:-0} -eq 0 ]]; then
+    return 0
+  fi
+
+  if echo "$output" | grep -qi "401\|403\|forbidden\|unauthorized"; then
+    echo "  Authenticating with ${REGISTRY_HOST} ..."
+    echo "$REGISTRY_TOKEN" | helm registry login "$REGISTRY_HOST" -u "$REGISTRY_USER" --password-stdin
+    helm push "$chart_path" "oci://${registry}"
+  else
+    return 1
+  fi
+}
 
 publish_chart() {
   local chart_name=$1
-  local force=${2:-}
+  local force_version=${2:-}
 
   local version
   version=$(jq -r ".helmCharts[\"${chart_name}\"].version" "$BUILD_JSON")
+
+  # Overwrite version if force_version is provided
+  if [[ -n "$force_version" ]]; then
+    version=$force_version
+  fi
+
   local repo
   repo=$(jq -r ".helmCharts[\"${chart_name}\"].repo" "$BUILD_JSON")
 
@@ -49,7 +73,7 @@ publish_chart() {
     return
   fi
 
-  if [[ -z "$force" ]] && helm show chart "oci://${OCI_REGISTRY}/${chart_name}" --version "$version" &>/dev/null; then
+  if [[ -z "$force_version" ]] && helm show chart "oci://${OCI_REGISTRY}/${chart_name}" --version "$version" &>/dev/null; then
     echo "  SKIP: ${chart_name}:${version} already exists in registry"
     return
   fi
@@ -58,41 +82,22 @@ publish_chart() {
   helm pull "$chart_name" --repo "$repo" --version "$version" --destination "$TMP_DIR"
 
   echo "  Pushing to oci://${OCI_REGISTRY} ..."
-  helm push "${TMP_DIR}/${chart_name}-${version}.tgz" "oci://${OCI_REGISTRY}"
+  push_with_auth_retry "${TMP_DIR}/${chart_name}-${version}.tgz" "${OCI_REGISTRY}"
   rm -f "${TMP_DIR}/${chart_name}-${version}.tgz"
 
   echo "  Published: oci://${OCI_REGISTRY}/${chart_name}:${version}"
 }
 
-if [[ $# -gt 0 ]]; then
-  chart=$1
-  force=${2:-}
-  echo ""
-  echo "==> ${chart}"
-  if [[ -n "$force" ]]; then
-    # Version override provided — skip existence check, use override version
-    repo=$(jq -r ".helmCharts[\"${chart}\"].repo" "$BUILD_JSON")
-    echo "  Downloading ${chart} ${force} from ${repo} ..."
-    helm pull "$chart" --repo "$repo" --version "$force" --destination "$TMP_DIR"
-    echo "  Pushing to oci://${OCI_REGISTRY} ..."
-    helm push "${TMP_DIR}/${chart}-${force}.tgz" "oci://${OCI_REGISTRY}"
-    echo "  Published: oci://${OCI_REGISTRY}/${chart}:${force}"
-  else
-    publish_chart "$chart"
-  fi
-else
-  if [[ ! -f "$CHARTS_LIST" ]]; then
-    echo "Error: ${CHARTS_LIST} not found. Create it with one chart name per line." >&2
-    exit 1
-  fi
-
-  while IFS= read -r chart || [[ -n "$chart" ]]; do
-    [[ -z "$chart" || "$chart" == \#* ]] && continue
-    echo ""
-    echo "==> ${chart}"
-    publish_chart "$chart"
-  done < "$CHARTS_LIST"
+if [[ $# -lt 1 ]]; then
+  echo "Error: chart name required. Usage: ./bin/publish-oci-chart <chart-name> [version]" >&2
+  exit 1
 fi
+
+chart=$1
+force_version=${2:-}
+echo ""
+echo "==> ${chart}"
+publish_chart "$chart" "$force_version"
 
 echo ""
 echo "Done."
