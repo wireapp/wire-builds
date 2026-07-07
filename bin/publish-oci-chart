@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Usage: REGISTRY_USER=<user> REGISTRY_TOKEN=<token> WIRE_CHANNEL=<channel> ./bin/publish-oci-chart <chart-name> [version]
+# Usage: REGISTRY_USER=<user> REGISTRY_TOKEN=<token> WIRE_CHANNEL=<channel> WIRE_BUILD_JSON=<path> ./bin/publish-oci-chart <chart-name> [version]
 #
 # Publishes a Helm chart from build.json to an OCI registry.
 # Charts already present in the registry at the current version are skipped.
@@ -10,10 +10,11 @@
 # With a chart name and version, uses the override version instead of build.json.
 #
 # Environment variables:
-#   REGISTRY_USER   Registry username (required)
-#   REGISTRY_TOKEN  Registry password / token (required)
-#   WIRE_CHANNEL    Release channel (required)
-#   OCI_REGISTRY    Full registry path (default: quay.io/wire/${WIRE_CHANNEL}/charts)
+#   REGISTRY_USER    Registry username (required)
+#   REGISTRY_TOKEN   Registry password / token (required)
+#   WIRE_CHANNEL     Release channel (required)
+#   WIRE_BUILD_JSON  Path to build.json (required)
+#   OCI_REGISTRY     Full registry path (default: quay.io/wire/${WIRE_CHANNEL}/charts)
 #
 # Requires: helm >= 3.8, jq
 
@@ -22,10 +23,10 @@ set -euo pipefail
 REGISTRY_USER=${REGISTRY_USER:?"Set REGISTRY_USER environment variable"}
 REGISTRY_TOKEN=${REGISTRY_TOKEN:?"Set REGISTRY_TOKEN environment variable"}
 WIRE_CHANNEL=${WIRE_CHANNEL:?"Set WIRE_CHANNEL environment variable"}
+WIRE_BUILD_JSON=${WIRE_BUILD_JSON:?"Set WIRE_BUILD_JSON environment variable"}
 OCI_REGISTRY=${OCI_REGISTRY:-"quay.io/wire/${WIRE_CHANNEL}/charts"}
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BUILD_JSON="${SCRIPT_DIR}/../build.json"
+BUILD_JSON="$WIRE_BUILD_JSON"
 
 REGISTRY_HOST="${OCI_REGISTRY%%/*}"
 TMP_DIR=$(mktemp -d)
