@@ -1,20 +1,31 @@
 #!/usr/bin/env bash
 
-#
-# Usage: REGISTRY_USER=<user> REGISTRY_TOKEN=<token> WIRE_CHANNEL=<channel> WIRE_BUILD_JSON=<path> ./bin/publish-oci-chart <chart-name> [version]
-#
 # Publishes a Helm chart from build.json to an OCI registry.
 # Charts already present in the registry at the current version are skipped.
 #
-# With a chart name, publishes that chart.
-# With a chart name and version, uses the override version instead of build.json.
+# Usage: REGISTRY_USER=<user> REGISTRY_TOKEN=<token> WIRE_CHANNEL=<channel> WIRE_BUILD_JSON=<path> ./bin/publish-oci-chart <chart-name> [version]
+#
+# Here's how you could call it for multiple charts:
+# charts=(
+# account-pages
+# sftd
+# coturn
+# team-settings
+# webapp
+# wire-ingress
+# wire-server
+# nginx-ingress-services
+# wire-server-enterprise
+# );
+# for c in "${charts[@]}"; do
+#   ./bin/publish-oci-chart "$c"
+# done
 #
 # Environment variables:
 #   REGISTRY_USER    Registry username (required)
 #   REGISTRY_TOKEN   Registry password / token (required)
 #   WIRE_CHANNEL     Release channel (required)
 #   WIRE_BUILD_JSON  Path to build.json (required)
-#   OCI_REGISTRY     Full registry path (default: quay.io/wire/${WIRE_CHANNEL}/charts)
 #
 # Requires: helm >= 3.8, jq
 
