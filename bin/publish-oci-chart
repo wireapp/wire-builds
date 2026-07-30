@@ -35,7 +35,7 @@ REGISTRY_USER=${REGISTRY_USER:?"Set REGISTRY_USER environment variable"}
 REGISTRY_TOKEN=${REGISTRY_TOKEN:?"Set REGISTRY_TOKEN environment variable"}
 WIRE_CHANNEL=${WIRE_CHANNEL:?"Set WIRE_CHANNEL environment variable"}
 WIRE_BUILD_JSON=${WIRE_BUILD_JSON:?"Set WIRE_BUILD_JSON environment variable"}
-OCI_REGISTRY=${OCI_REGISTRY:-"quay.io/wire/${WIRE_CHANNEL}/charts"}
+OCI_REGISTRY=${OCI_REGISTRY:-"quay.io/wire/charts/${WIRE_CHANNEL}"}
 
 REGISTRY_HOST="${OCI_REGISTRY%%/*}"
 TMP_DIR=$(mktemp -d)
