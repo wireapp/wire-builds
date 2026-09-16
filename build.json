@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-zulu.5432",
+  "version": "1.0.0-zulu.5433",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -11,11 +11,11 @@
     },
     "webapp": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
-      "version": "0.8.0-pre.3628",
+      "version": "0.8.0-pre.3629",
       "meta": {
-        "appVersion": "dev-v0.34.10-f34f112",
-        "commitURL": "https://github.com/wireapp/wire-webapp/commit/f34f11264347994f3fff021859586b33bbf4543e",
-        "commit": "f34f11264347994f3fff021859586b33bbf4543e"
+        "appVersion": "dev-v0.34.10-95c3fe7",
+        "commitURL": "https://github.com/wireapp/wire-webapp/commit/95c3fe723fb62122e7e5d6e3386bc33732c35ebf",
+        "commit": "95c3fe723fb62122e7e5d6e3386bc33732c35ebf"
       }
     },
     "team-settings": {
