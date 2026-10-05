@@ -1,5 +1,118 @@
 {
-  "version": "1.0.0-164",
+  "version": "2026.09.0",
   "helmCharts": {
+    "account-pages": {
+      "repo": "oci://quay.io/wire/charts/stable/account-pages",
+      "version": "0.9.0-pre.247",
+      "meta": {
+        "digest": "sha256:acff7a6d772429ebc333111236e5f294e43c7e11638d9d98b6756041bc417bcd"
+      }
+    },
+    "coturn": {
+      "repo": "oci://quay.io/wire/charts/stable/coturn",
+      "version": "4.6.2-federation-wireapp.59",
+      "meta": {
+        "digest": "sha256:2ba734d8a0ced366b3d453d4d9d69789cb9c786829b2af8cc1601744bbd63b20"
+      }
+    },
+    "fake-aws-sqs": {
+      "repo": "oci://quay.io/wire/charts/dev/fake-aws-sqs",
+      "version": "5.32.0-pre.12",
+      "meta": {
+        "digest": "sha256:db0e3db258a269ec300f94cb6110b61cf77c9f6bf84310ba661eb4787347d4d8"
+      }
+    },
+    "nginx-ingress-services": {
+      "repo": "oci://quay.io/wire/charts/dev/nginx-ingress-services",
+      "version": "5.32.0-pre.12",
+      "meta": {
+        "digest": "sha256:26673fc86104191835a905b6a46e16f2eec1a8b8034e15dc20607d910dd31022"
+      }
+    },
+    "reaper": {
+      "repo": "oci://quay.io/wire/charts/dev/reaper",
+      "version": "5.32.0-pre.12",
+      "meta": {
+        "digest": "sha256:7c1f445a6f5815f83faf6c9f8a08e44e7bf2b5caf012db57551b73492abe630d"
+      }
+    },
+    "redis-ephemeral": {
+      "repo": "oci://quay.io/wire/charts/dev/redis-ephemeral",
+      "version": "5.32.0-pre.12",
+      "meta": {
+        "digest": "sha256:9d41f0e0db6080ca9ddc0f94abba3e4f6d0ff1a49366fc5a59324f0b4adbe0e0"
+      }
+    },
+    "sftd": {
+      "repo": "oci://quay.io/wire/charts/stable/sftd",
+      "version": "0.147.0",
+      "meta": {
+        "digest": "sha256:ee0224ff515474476ed265d7ceb21b79413e0caf76914656ac60cd99ef7f1a35"
+      }
+    },
+    "smallstep-accomp": {
+      "repo": "oci://quay.io/wire/charts/stable/smallstep-accomp",
+      "version": "6.0.12",
+      "meta": {
+        "digest": "sha256:7472f8e089ee74a68ae15f4eb280bf108a948a33843131442500fb9e6929d949"
+      }
+    },
+    "step-certificates": {
+      "repo": "oci://quay.io/wire/charts/stable/step-certificates",
+      "version": "1.29.0",
+      "meta": {
+        "digest": "sha256:7be1340a2a3dc88e20d07799554b1e98b1fde588bd6445865720d162ada8a2dc"
+      }
+    },
+    "team-settings": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
+      "version": "4.24.2"
+    },
+    "webapp": {
+      "repo": "oci://quay.io/wire/charts/dev/webapp",
+      "version": "0.8.0-pre.3692",
+      "meta": {
+        "digest": "sha256:8324b57e679641a56ab1abf9488475c30b4ca6e5277d0c756f9db58156528083"
+      }
+    },
+    "wire-server": {
+      "repo": "oci://quay.io/wire/charts/dev/wire-server",
+      "version": "5.32.0-pre.12",
+      "meta": {
+        "digest": "sha256:170f469d6a948b956487cf88e0e1a0a1c515082ce54903e364560e65cc6e9761"
+      }
+    },
+    "cassandra-external": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+      "version": "5.32.0-pre.12"
+    },
+    "elasticsearch-external": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+      "version": "5.32.0-pre.12"
+    },
+    "ingress-nginx-controller": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+      "version": "5.32.0-pre.12"
+    },
+    "ldap-scim-bridge": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+      "version": "5.32.0-pre.12"
+    },
+    "minio-external": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+      "version": "5.32.0-pre.12"
+    },
+    "rabbitmq-external": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+      "version": "5.32.0-pre.12"
+    },
+    "migrate-features": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "0.1.0"
+    },
+    "postgresql-external": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "0.0.44"
+    }
   }
 }
