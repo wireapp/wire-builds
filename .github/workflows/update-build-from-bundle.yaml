@@ -1,0 +1,94 @@
+name: Update build from bundle
+
+on:
+  repository_dispatch:
+    types: [update-build-from-bundle]
+  workflow_dispatch:
+    inputs:
+      bundle:
+        description: "Bundle JSON blob"
+        required: true
+        type: string
+
+env:
+  # Static mapping from "{branch}-{version}" to target wire-builds branch
+  BUNDLE_BRANCH_MAP: |
+    {
+      "gov-2026.09.0": "2026-q4-from-rm"
+    }
+
+jobs:
+  update-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Parse inputs
+        id: inputs
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            BUNDLE='${{ toJSON(github.event.client_payload.bundle) }}'
+          else
+            BUNDLE='${{ inputs.bundle }}'
+          fi
+
+          # Write bundle to file to avoid shell quoting issues
+          echo "$BUNDLE" > /tmp/bundle.json
+
+          BRANCH=$(jq -r '.branch' /tmp/bundle.json)
+          VERSION=$(jq -r '.version' /tmp/bundle.json)
+          NAME=$(jq -r '.name' /tmp/bundle.json)
+          LOOKUP_KEY="${BRANCH}-${VERSION}"
+
+          echo "branch=${BRANCH}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "name=${NAME}" >> "$GITHUB_OUTPUT"
+          echo "lookup_key=${LOOKUP_KEY}" >> "$GITHUB_OUTPUT"
+
+          echo "Bundle: ${NAME}"
+          echo "Lookup key: ${LOOKUP_KEY}"
+
+      - name: Determine target branch
+        id: target
+        run: |
+          LOOKUP_KEY='${{ steps.inputs.outputs.lookup_key }}'
+
+          TARGET_BRANCH=$(echo '${{ env.BUNDLE_BRANCH_MAP }}' | jq -r --arg key "$LOOKUP_KEY" '.[$key] // empty')
+
+          if [ -z "$TARGET_BRANCH" ]; then
+            echo "No branch mapping found for key '${LOOKUP_KEY}', skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "target_branch=${TARGET_BRANCH}" >> "$GITHUB_OUTPUT"
+            echo "Mapped '${LOOKUP_KEY}' -> branch '${TARGET_BRANCH}'"
+          fi
+
+      - name: Checkout target branch
+        if: steps.target.outputs.skip != 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.target.outputs.target_branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate build.json from bundle
+        if: steps.target.outputs.skip != 'true'
+        run: |
+          EXTRA_ARGS=""
+          if [ -f extra_components.json ]; then
+            EXTRA_ARGS="extra_components.json"
+          fi
+          ./bin/build-from-bundle /tmp/bundle.json build.json $EXTRA_ARGS
+
+      - name: Commit and push
+        if: steps.target.outputs.skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet build.json; then
+            echo "No changes to build.json"
+            exit 0
+          fi
+
+          BUNDLE_NAME='${{ steps.inputs.outputs.name }}-${{ steps.inputs.outputs.version }}'
+          git add build.json
+          git commit -m "Update build from bundle '${BUNDLE_NAME}'"
+          git push

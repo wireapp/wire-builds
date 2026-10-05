@@ -1,0 +1,206 @@
+#!/usr/bin/env python3
+
+"""
+Usage: ./bin/build-from-bundle <input-bundle.json> <output-build.json> [extra-components.json]
+
+Reads a bundle JSON and generates a fresh build.json. Optionally merges
+in charts from an extra_components.json file for charts that are not
+managed by wire-release-manager.
+
+Components listed in the bundle's "exclude" list or missing a
+"repository" field are skipped. Charts that are companions of
+wire-server are automatically derived from the wire-server version.
+"""
+
+import json
+import os
+import sys
+import urllib.request
+
+# Components in the bundle that are not helm charts and should be ignored
+BUNDLE_IGNORE_COMPONENTS = [
+    "zauth",
+]
+
+# The exact set of charts that must be present in the final build.json.
+# The script fails if any are missing or if there are extraneous charts.
+REQUIRED_CHARTS = [
+    "account-pages",
+    "cassandra-external",
+    "coturn",
+    "elasticsearch-external",
+    "fake-aws-sqs",
+    "ingress-nginx-controller",
+    "ldap-scim-bridge",
+    "migrate-features",
+    "minio-external",
+    "nginx-ingress-services",
+    "postgresql-external",
+    "rabbitmq-external",
+    "reaper",
+    "redis-ephemeral",
+    "sftd",
+    "smallstep-accomp",
+    "step-certificates",
+    "team-settings",
+    "webapp",
+    "wire-server",
+]
+
+S3_BASE_URLS = [
+    "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+    "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+]
+
+# Charts that share wire-server's version and are published to the same
+# S3 helm repo. These get derived automatically from the wire-server
+# component in the bundle.
+WIRE_SERVER_COMPANION_CHARTS = [
+    "cassandra-external",
+    "elasticsearch-external",
+    "fake-aws-sqs",
+    "ingress-nginx-controller",
+    "ldap-scim-bridge",
+    "minio-external",
+    "nginx-ingress-services",
+    "rabbitmq-external",
+    "reaper",
+    "redis-ephemeral",
+]
+
+
+def find_published_chart(name, version):
+    """Find the S3 repo URL where a chart is published.
+
+    Tries the stable charts repo first, then falls back to charts-develop.
+    Returns the base repo URL. Raises SystemExit if not found in either.
+    """
+    for base_url in S3_BASE_URLS:
+        url = f"{base_url}/{name}-{version}.tgz"
+        req = urllib.request.Request(url, method="HEAD")
+        try:
+            resp = urllib.request.urlopen(req)
+            if resp.status == 200:
+                print(f"  Found {name}-{version} at {base_url}")
+                return base_url
+        except urllib.error.HTTPError:
+            continue
+
+    print(f"Error: chart {name}-{version} not found in any S3 repo")
+    sys.exit(1)
+
+
+def main():
+    if len(sys.argv) < 3 or len(sys.argv) > 4:
+        print(f"Usage: {sys.argv[0]} <input-bundle.json> <output-build.json> [extra-components.json]")
+        sys.exit(1)
+
+    input_path = sys.argv[1]
+    output_path = sys.argv[2]
+    extra_path = sys.argv[3] if len(sys.argv) == 4 else None
+
+    with open(input_path) as f:
+        bundle = json.load(f)
+
+    excludes = set(bundle.get("exclude", []))
+    ignores = set(BUNDLE_IGNORE_COMPONENTS)
+    components = bundle.get("components", {})
+
+    charts = {}
+    added = 0
+    skipped = 0
+
+    for name, comp in components.items():
+        if name in ignores:
+            print(f"Skipping ignored (not a helm chart): {name}")
+            skipped += 1
+            continue
+
+        if name in excludes:
+            print(f"Skipping excluded: {name}")
+            skipped += 1
+            continue
+
+        if "repository" not in comp:
+            print(f"Skipping no repository: {name}")
+            skipped += 1
+            continue
+
+        chart = {
+            "repo": comp["repository"],
+            "version": comp["version"],
+        }
+
+        meta = {}
+        if "digest" in comp:
+            meta["digest"] = comp["digest"]
+        if meta:
+            chart["meta"] = meta
+
+        charts[name] = chart
+        added += 1
+
+    # Derive wire-server companion charts
+    if "wire-server" in components:
+        ws_version = components["wire-server"]["version"]
+        print(f"Deriving companion charts for wire-server {ws_version}:")
+
+        for name in WIRE_SERVER_COMPANION_CHARTS:
+            if name in charts:
+                print(f"  Skipping {name}: already in bundle")
+                continue
+            if name in excludes:
+                print(f"  Skipping {name}: excluded")
+                continue
+
+            repo = find_published_chart(name, ws_version)
+            charts[name] = {
+                "repo": repo,
+                "version": ws_version,
+            }
+            added += 1
+
+    # Merge extra components
+    if extra_path:
+        with open(extra_path) as f:
+            extra = json.load(f)
+        for name, entry in extra.get("helmCharts", {}).items():
+            if name in charts:
+                print(f"Extra: skipping {name}: already present")
+                continue
+            print(f"Extra: adding {name}")
+            charts[name] = entry
+            added += 1
+
+    build = {
+        "version": bundle.get("version", "0.0.0"),
+        "helmCharts": charts,
+    }
+
+    print(f"Added {added} charts, skipped {skipped}")
+
+    # Validate against required charts
+    required = set(REQUIRED_CHARTS)
+    actual = set(charts.keys())
+    missing = sorted(required - actual)
+    extraneous = sorted(actual - required)
+    errors = False
+
+    if missing:
+        print(f"Error: missing required charts: {', '.join(missing)}")
+        errors = True
+    if extraneous:
+        print(f"Error: extraneous charts: {', '.join(extraneous)}")
+        errors = True
+    if errors:
+        sys.exit(1)
+
+    print(f"Validated: all {len(required)} required charts present, no extraneous charts")
+
+    with open(output_path, "w") as f:
+        json.dump(build, f, indent=2)
+        f.write("\n")
+
+
+if __name__ == "__main__":
+    main()
