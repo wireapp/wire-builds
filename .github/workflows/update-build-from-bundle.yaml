@@ -61,24 +61,32 @@ jobs:
             echo "Mapped '${LOOKUP_KEY}' -> branch '${TARGET_BRANCH}'"
           fi
 
+      - name: Checkout scripts
+        if: steps.target.outputs.skip != 'true'
+        uses: actions/checkout@v4
+        with:
+          path: scripts
+
       - name: Checkout target branch
         if: steps.target.outputs.skip != 'true'
         uses: actions/checkout@v4
         with:
           ref: ${{ steps.target.outputs.target_branch }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          path: target
 
       - name: Generate build.json from bundle
         if: steps.target.outputs.skip != 'true'
         run: |
           EXTRA_ARGS=""
-          if [ -f extra_components.json ]; then
-            EXTRA_ARGS="extra_components.json"
+          if [ -f target/extra_components.json ]; then
+            EXTRA_ARGS="target/extra_components.json"
           fi
-          ./bin/build-from-bundle /tmp/bundle.json build.json $EXTRA_ARGS
+          ./scripts/bin/build-from-bundle /tmp/bundle.json target/build.json $EXTRA_ARGS
 
       - name: Commit and push
         if: steps.target.outputs.skip != 'true'
+        working-directory: target
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
