@@ -2,11 +2,8 @@
   "version": "2026.09.0",
   "helmCharts": {
     "account-pages": {
-      "repo": "oci://quay.io/wire/charts/stable/account-pages",
-      "version": "0.9.0-pre.247",
-      "meta": {
-        "digest": "sha256:acff7a6d772429ebc333111236e5f294e43c7e11638d9d98b6756041bc417bcd"
-      }
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
+      "version": "0.9.0-pre.49"
     },
     "coturn": {
       "repo": "oci://quay.io/wire/charts/stable/coturn",
@@ -21,6 +18,10 @@
       "meta": {
         "digest": "sha256:db0e3db258a269ec300f94cb6110b61cf77c9f6bf84310ba661eb4787347d4d8"
       }
+    },
+    "ldap-scim-bridge": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "5.30.0"
     },
     "nginx-ingress-services": {
       "repo": "oci://quay.io/wire/charts/dev/nginx-ingress-services",
@@ -95,10 +96,6 @@
       "version": "5.32.0-pre.12"
     },
     "ingress-nginx-controller": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.32.0-pre.12"
-    },
-    "ldap-scim-bridge": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
       "version": "5.32.0-pre.12"
     },
