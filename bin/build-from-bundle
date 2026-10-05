@@ -45,6 +45,10 @@ REQUIRED_CHARTS = [
     "team-settings",
     "webapp",
     "wire-server",
+    # below here: not required by the bundle, but by test envs 
+    "disallowed-clients",
+    "fake-aws",
+    "wire-server-enterprise"
 ]
 
 S3_BASE_URLS = [
@@ -58,6 +62,7 @@ S3_BASE_URLS = [
 WIRE_SERVER_COMPANION_CHARTS = [
     "cassandra-external",
     "elasticsearch-external",
+    "fake-aws",
     "fake-aws-sqs",
     "ingress-nginx-controller",
     "ldap-scim-bridge",
@@ -66,6 +71,7 @@ WIRE_SERVER_COMPANION_CHARTS = [
     "rabbitmq-external",
     "reaper",
     "redis-ephemeral",
+    "wire-server-enterprise",
 ]
 
 
