@@ -132,8 +132,11 @@ def main():
             skipped += 1
             continue
 
+        repo = comp["repository"]
+        if repo.startswith("oci://"):
+            repo = repo.rsplit("/", 1)[0]
         chart = {
-            "repo": comp["repository"],
+            "repo": repo,
             "version": comp["version"],
         }
 
