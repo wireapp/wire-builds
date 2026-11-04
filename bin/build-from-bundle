@@ -4,8 +4,8 @@
 Usage: ./bin/build-from-bundle <input-bundle.json> <output-build.json> [extra-components.json]
 
 Reads a bundle JSON and generates a fresh build.json. Optionally merges
-in charts from an extra_components.json file for charts that are not
-managed by wire-release-manager.
+in charts that are not managed by wire-release-manager: the EXTRA_CHARTS
+table in this script, plus an optional extra_components.json file.
 
 Components listed in the bundle's "exclude" list or missing a
 "repository" field are skipped. Charts that are companions of
@@ -79,6 +79,24 @@ def apply_ugly_hacks(components):
 # ###                      !!!  END OF UGLY HACKS  !!!                   ###
 # ##########################################################################
 
+
+# Charts that wire-release-manager does not manage. They used to live in
+# extra_components.json on the target branch and are inlined here; the optional
+# extra-components.json argument is still merged after them, and never overrides them.
+EXTRA_CHARTS = {
+    "disallowed-clients": {
+        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+        "version": "0.1.0",
+    },
+    "migrate-features": {
+        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+        "version": "0.1.0",
+    },
+    "postgresql-external": {
+        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+        "version": "0.0.44",
+    },
+}
 
 # Components in the bundle that are not helm charts and should be ignored
 BUNDLE_IGNORE_COMPONENTS = [
@@ -236,11 +254,14 @@ def main():
             }
             added += 1
 
-    # Merge extra components
+    # Merge extra components: the inlined ones first, then the optional file
+    extras = dict(EXTRA_CHARTS)
     if extra_path:
         with open(extra_path) as f:
-            extra = json.load(f)
-        for name, entry in extra.get("helmCharts", {}).items():
+            for name, entry in json.load(f).get("helmCharts", {}).items():
+                extras.setdefault(name, entry)
+    if extras:
+        for name, entry in extras.items():
             if name in charts:
                 print(f"Extra: skipping {name}: already present")
                 continue
