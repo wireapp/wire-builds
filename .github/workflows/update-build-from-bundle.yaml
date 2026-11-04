@@ -23,6 +23,10 @@ jobs:
     steps:
       - name: Parse inputs
         id: inputs
+        env:
+          # Which release manager sent the bundle (prod, staging, local).
+          # Absent (older senders, manual runs) means prod.
+          RM_ORIGIN: ${{ github.event.client_payload.rm_origin }}
         run: |
           if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
             BUNDLE='${{ toJSON(github.event.client_payload.bundle) }}'
@@ -38,6 +42,9 @@ jobs:
           NAME=$(jq -r '.name' /tmp/bundle.json)
           LOOKUP_KEY="${BRANCH}-${VERSION}"
 
+          ORIGIN="${RM_ORIGIN:-prod}"
+
+          echo "origin=${ORIGIN}" >> "$GITHUB_OUTPUT"
           echo "branch=${BRANCH}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "name=${NAME}" >> "$GITHUB_OUTPUT"
@@ -45,11 +52,21 @@ jobs:
 
           echo "Bundle: ${NAME}"
           echo "Lookup key: ${LOOKUP_KEY}"
+          echo "Origin: ${ORIGIN}"
 
       - name: Determine target branch
         id: target
+        env:
+          ORIGIN: ${{ steps.inputs.outputs.origin }}
         run: |
           LOOKUP_KEY='${{ steps.inputs.outputs.lookup_key }}'
+
+          # Gate: only bundles from the prod release manager update wire-builds
+          if [ "$ORIGIN" != "prod" ]; then
+            echo "Bundle comes from '${ORIGIN}', only 'prod' is allowed, skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
           TARGET_BRANCH=$(echo '${{ env.BUNDLE_BRANCH_MAP }}' | jq -r --arg key "$LOOKUP_KEY" '.[$key] // empty')
 
