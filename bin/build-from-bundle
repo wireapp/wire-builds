@@ -17,6 +17,69 @@ import os
 import sys
 import urllib.request
 
+# ##########################################################################
+# ##########################################################################
+# ###                                                                    ###
+# ###                          !!!  UGLY HACKS  !!!                      ###
+# ###                                                                    ###
+# ###  DISCLAIMER: everything between the two big banners is a           ###
+# ###  TEMPORARY WORKAROUND. It overrides what the release manager       ###
+# ###  sent with values that are written down by hand here.              ###
+# ###                                                                    ###
+# ###   * It is NOT the source of truth. The bundle is.                  ###
+# ###   * The replacement versions and repositories are NOT verified     ###
+# ###     against the bundle; they may be wrong, outdated or removed.    ###
+# ###   * Each entry silently changes what ends up in build.json.        ###
+# ###   * Do NOT add entries without a reason, an owner and an exit.     ###
+# ###   * DELETE an entry as soon as the release manager carries the     ###
+# ###     real chart location for that component and version.            ###
+# ###                                                                    ###
+# ###  Every applied hack prints an "UGLY HACK:" line in the log.        ###
+# ###                                                                    ###
+# ##########################################################################
+# ##########################################################################
+#
+# component -> {"match": exact bundle version to replace,
+#               "version": version to use instead,
+#               "repository": chart repository to use instead,
+#               "why": what is missing in the bundle}
+UGLY_HACKS = {
+    "webapp": {
+        "match": "2026-09-23.1-production",
+        "version": "0.8.0-pre.3710",
+        "repository": "oci://quay.io/wire/charts/dev/webapp",
+        "why": "no chart location for this webapp version in the release manager",
+    },
+    "account-pages": {
+        "match": "v2.11.0",
+        "version": "0.9.0-pre.255",
+        "repository": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
+        "why": "the v2.11.0 tag build failed, so no release chart exists; "
+        "0.9.0-pre.255 was built from the same commit (8c2af7a, "
+        "appVersion 2.11.0-v0.34.10-8c2af7a)",
+    },
+}
+
+
+def apply_ugly_hacks(components):
+    """Override the bundle's components in place according to UGLY_HACKS."""
+    for name, hack in UGLY_HACKS.items():
+        comp = components.get(name)
+        if comp is None or comp.get("version") != hack["match"]:
+            continue
+        print(
+            f"UGLY HACK: {name} {hack['match']} -> {hack['version']} "
+            f"from {hack['repository']} ({hack['why']})"
+        )
+        comp["version"] = hack["version"]
+        comp["repository"] = hack["repository"]
+
+
+# ##########################################################################
+# ###                      !!!  END OF UGLY HACKS  !!!                   ###
+# ##########################################################################
+
+
 # Components in the bundle that are not helm charts and should be ignored
 BUNDLE_IGNORE_COMPONENTS = [
     "zauth",
@@ -114,17 +177,7 @@ def main():
     ignores = set(BUNDLE_IGNORE_COMPONENTS)
     components = bundle.get("components", {})
 
-    # ======================= UGLY HACKS (start) =======================
-    # The release manager has no chart location for webapp 2026-09-23.1-production,
-    # so build.json would miss it. Until that is located properly, point it at the
-    # team-settings dev chart. Remove once the bundle carries the real repository.
-    webapp = components.get("webapp")
-    if webapp is not None and webapp.get("version") == "2026-09-23.1-production":
-        print("UGLY HACK: webapp 2026-09-23.1-production -> 0.8.0-pre.3710 "
-              "from oci://quay.io/wire/charts/dev/webapp")
-        webapp["version"] = "0.8.0-pre.3710"
-        webapp["repository"] = "oci://quay.io/wire/charts/dev/webapp"
-    # ======================== UGLY HACKS (end) ========================
+    apply_ugly_hacks(components)
 
     charts = {}
     added = 0
