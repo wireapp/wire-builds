@@ -108,7 +108,9 @@ def main():
     with open(input_path) as f:
         bundle = json.load(f)
 
-    excludes = set(bundle.get("exclude", []))
+    # An exclusion cannot drop a chart the build requires: build.json must hold
+    # exactly REQUIRED_CHARTS, so those are never treated as excluded.
+    excludes = set(bundle.get("exclude", [])) - set(REQUIRED_CHARTS)
     ignores = set(BUNDLE_IGNORE_COMPONENTS)
     components = bundle.get("components", {})
 
