@@ -113,6 +113,18 @@ def main():
     ignores = set(BUNDLE_IGNORE_COMPONENTS)
     components = bundle.get("components", {})
 
+    # ======================= UGLY HACKS (start) =======================
+    # The release manager has no chart location for webapp 2026-09-23.1-production,
+    # so build.json would miss it. Until that is located properly, point it at the
+    # team-settings dev chart. Remove once the bundle carries the real repository.
+    webapp = components.get("webapp")
+    if webapp is not None and webapp.get("version") == "2026-09-23.1-production":
+        print("UGLY HACK: webapp 2026-09-23.1-production -> 0.8.0-pre.3710 "
+              "from oci://quay.io/wire/charts/dev/team-settings")
+        webapp["version"] = "0.8.0-pre.3710"
+        webapp["repository"] = "oci://quay.io/wire/charts/dev/team-settings"
+    # ======================== UGLY HACKS (end) ========================
+
     charts = {}
     added = 0
     skipped = 0
