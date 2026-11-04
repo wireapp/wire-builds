@@ -120,9 +120,9 @@ def main():
     webapp = components.get("webapp")
     if webapp is not None and webapp.get("version") == "2026-09-23.1-production":
         print("UGLY HACK: webapp 2026-09-23.1-production -> 0.8.0-pre.3710 "
-              "from oci://quay.io/wire/charts/dev/team-settings")
+              "from oci://quay.io/wire/charts/dev/webapp")
         webapp["version"] = "0.8.0-pre.3710"
-        webapp["repository"] = "oci://quay.io/wire/charts/dev/team-settings"
+        webapp["repository"] = "oci://quay.io/wire/charts/dev/webapp"
     # ======================== UGLY HACKS (end) ========================
 
     charts = {}
