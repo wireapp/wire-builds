@@ -15,6 +15,8 @@ wire-server are automatically derived from the wire-server version.
 import json
 import os
 import sys
+import urllib.error
+import urllib.parse
 import urllib.request
 
 # ##########################################################################
@@ -156,11 +158,60 @@ WIRE_SERVER_COMPANION_CHARTS = [
 ]
 
 
-def find_published_chart(name, version):
-    """Find the S3 repo URL where a chart is published.
+def oci_chart_exists(oci_base, name, version):
+    """Check whether oci://<host>/<path>/<name>:<version> exists.
 
-    Tries the stable charts repo first, then falls back to charts-develop.
-    Returns the base repo URL. Raises SystemExit if not found in either.
+    Uses the OCI distribution API with an anonymous bearer token, which is
+    enough for public repositories such as quay.io/wire/charts/*.
+    """
+    host, _, path = oci_base[len("oci://"):].partition("/")
+    url = f"https://{host}/v2/{path}/{name}/manifests/{version}"
+    accept = ",".join([
+        "application/vnd.oci.image.manifest.v1+json",
+        "application/vnd.oci.image.index.v1+json",
+        "application/vnd.docker.distribution.manifest.v2+json",
+    ])
+    headers = {"Accept": accept}
+
+    for _ in range(2):
+        req = urllib.request.Request(url, method="HEAD", headers=headers)
+        try:
+            return urllib.request.urlopen(req).status == 200
+        except urllib.error.HTTPError as e:
+            if e.code != 401 or "Authorization" in headers:
+                return False
+            challenge = e.headers.get("WWW-Authenticate", "")
+            if not challenge.lower().startswith("bearer "):
+                return False
+            params = dict(
+                part.strip().split("=", 1)
+                for part in challenge[len("bearer "):].split(",")
+                if "=" in part
+            )
+            params = {k: v.strip('"') for k, v in params.items()}
+            realm = params.pop("realm", None)
+            if not realm:
+                return False
+            token_url = f"{realm}?{urllib.parse.urlencode(params)}"
+            try:
+                with urllib.request.urlopen(token_url) as resp:
+                    token = json.load(resp).get("token")
+            except urllib.error.URLError:
+                return False
+            if not token:
+                return False
+            headers["Authorization"] = f"Bearer {token}"
+    return False
+
+
+def find_published_chart(name, version, oci_base=None):
+    """Find the repo URL where a chart is published.
+
+    Tries the stable S3 charts repo first, then charts-develop, then (if
+    oci_base is given) the OCI registry at <oci_base>/<name>.
+    oci_base is the registry path without the chart name, e.g.
+    oci://quay.io/wire/charts/stable (derived from wire-server's repository).
+    Returns the base repo URL. Raises SystemExit if not found anywhere.
     """
     for base_url in S3_BASE_URLS:
         url = f"{base_url}/{name}-{version}.tgz"
@@ -173,7 +224,11 @@ def find_published_chart(name, version):
         except urllib.error.HTTPError:
             continue
 
-    print(f"Error: chart {name}-{version} not found in any S3 repo")
+    if oci_base and oci_chart_exists(oci_base, name, version):
+        print(f"  Found {name}-{version} at {oci_base}")
+        return oci_base
+
+    print(f"Error: chart {name}-{version} not found in any S3 or OCI repo")
     sys.exit(1)
 
 
@@ -237,6 +292,9 @@ def main():
     # Derive wire-server companion charts
     if "wire-server" in components:
         ws_version = components["wire-server"]["version"]
+        ws_repo = components["wire-server"].get("repository", "")
+        # oci://quay.io/wire/charts/stable/wire-server -> oci://quay.io/wire/charts/stable
+        oci_base = ws_repo.rsplit("/", 1)[0] if ws_repo.startswith("oci://") else None
         print(f"Deriving companion charts for wire-server {ws_version}:")
 
         for name in WIRE_SERVER_COMPANION_CHARTS:
@@ -247,7 +305,7 @@ def main():
                 print(f"  Skipping {name}: excluded")
                 continue
 
-            repo = find_published_chart(name, ws_version)
+            repo = find_published_chart(name, ws_version, oci_base)
             charts[name] = {
                 "repo": repo,
                 "version": ws_version,
