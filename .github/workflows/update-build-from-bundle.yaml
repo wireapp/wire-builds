@@ -67,12 +67,30 @@ jobs:
         run: |
           LOOKUP_KEY='${{ steps.inputs.outputs.lookup_key }}'
 
-          # Gate: only bundles from the prod release manager update wire-builds
+          # ####################################################################
+          # ####################################################################
+          # ###                                                              ###
+          # ###                 !!!  TEMPORARY  -  REVERT ME  !!!            ###
+          # ###                                                              ###
+          # ###  DISCLAIMER: this gate accepts bundles ONLY from the         ###
+          # ###  *STAGING* release manager and REJECTS *PROD*.               ###
+          # ###  That is the WRONG way round for normal operation. It is a   ###
+          # ###  temporary switch and MUST BE REVERTED to accept 'prod'      ###
+          # ###  (and reject 'staging') before this is relied on.            ###
+          # ###                                                              ###
+          # ###  Until then, prod bundles are silently skipped and do NOT    ###
+          # ###  update wire-builds.                                         ###
+          # ###                                                              ###
+          # ####################################################################
+          # ####################################################################
+          #
+          # Gate: only bundles from the staging release manager update wire-builds
           # (not enforced in dry run, since nothing is pushed)
           if [ "$DRY_RUN" = "true" ]; then
             echo "Dry run: skipping origin check (origin '${ORIGIN}')"
-          elif [ "$ORIGIN" != "prod" ]; then
-            echo "Bundle comes from '${ORIGIN}', only 'prod' is allowed, skipping"
+          elif [ "$ORIGIN" != "staging" ]; then
+            echo "!!! TEMPORARY GATE: only 'staging' is accepted, 'prod' is REJECTED. REVERT THIS !!!"
+            echo "Bundle comes from '${ORIGIN}', only 'staging' is allowed, skipping"
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
