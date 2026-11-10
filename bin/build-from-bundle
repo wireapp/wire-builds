@@ -19,49 +19,6 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-# ##########################################################################
-# ##########################################################################
-# ###                                                                    ###
-# ###                          !!!  UGLY HACKS  !!!                      ###
-# ###                                                                    ###
-# ###  DISCLAIMER: everything between the two big banners is a           ###
-# ###  TEMPORARY WORKAROUND. It overrides what the release manager       ###
-# ###  sent with values that are written down by hand here.              ###
-# ###                                                                    ###
-# ###   * It is NOT the source of truth. The bundle is.                  ###
-# ###   * The replacement versions and repositories are NOT verified     ###
-# ###     against the bundle; they may be wrong, outdated or removed.    ###
-# ###   * Each entry silently changes what ends up in build.json.        ###
-# ###   * Do NOT add entries without a reason, an owner and an exit.     ###
-# ###   * DELETE an entry as soon as the release manager carries the     ###
-# ###     real chart location for that component and version.            ###
-# ###                                                                    ###
-# ###  Every applied hack prints an "UGLY HACK:" line in the log.        ###
-# ###                                                                    ###
-# ##########################################################################
-# ##########################################################################
-#
-# component -> {"match": exact bundle version to replace,
-#               "version": version to use instead,
-#               "repository": chart repository to use instead,
-#               "why": what is missing in the bundle}
-UGLY_HACKS = {
-    "webapp": {
-        "match": "2026-09-23.1-production",
-        "version": "0.8.0-pre.3710",
-        "repository": "oci://quay.io/wire/charts/dev/webapp",
-        "why": "no chart location for this webapp version in the release manager",
-    },
-    "account-pages": {
-        "match": "v2.11.0",
-        "version": "0.9.0-pre.255",
-        "repository": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
-        "why": "the v2.11.0 tag build failed, so no release chart exists; "
-        "0.9.0-pre.255 was built from the same commit (8c2af7a, "
-        "appVersion 2.11.0-v0.34.10-8c2af7a)",
-    },
-}
-
 # Charts that wire-release-manager does not manage. They used to live in
 # extra_components.json on the target branch and are inlined here; the optional
 # extra-components.json argument is still merged after them, and never overrides them.
@@ -69,33 +26,8 @@ EXTRA_CHARTS = {
     "migrate-features": {
         "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
         "version": "0.1.0",
-    },
-    "postgresql-external": {
-        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-        "version": "0.0.44",
-    },
+    }
 }
-
-
-
-def apply_ugly_hacks(components):
-    """Override the bundle's components in place according to UGLY_HACKS."""
-    for name, hack in UGLY_HACKS.items():
-        comp = components.get(name)
-        if comp is None or comp.get("version") != hack["match"]:
-            continue
-        print(
-            f"UGLY HACK: {name} {hack['match']} -> {hack['version']} "
-            f"from {hack['repository']} ({hack['why']})"
-        )
-        comp["version"] = hack["version"]
-        comp["repository"] = hack["repository"]
-
-
-# ##########################################################################
-# ###                      !!!  END OF UGLY HACKS  !!!                   ###
-# ##########################################################################
-
 
 # Components in the bundle that are not helm charts and should be ignored
 BUNDLE_IGNORE_COMPONENTS = [
@@ -116,7 +48,6 @@ REQUIRED_CHARTS = [
     "migrate-features",
     "minio-external",
     "nginx-ingress-services",
-    "postgresql-external",
     "rabbitmq-external",
     "reaper",
     "redis-ephemeral",
@@ -126,8 +57,6 @@ REQUIRED_CHARTS = [
     "team-settings",
     "webapp",
     "wire-server",
-    # below here: not required by the bundle, but by test envs 
-    "wire-server-enterprise"
 ]
 
 S3_BASE_URLS = [
@@ -149,7 +78,6 @@ WIRE_SERVER_COMPANION_CHARTS = [
     "rabbitmq-external",
     "reaper",
     "redis-ephemeral",
-    "wire-server-enterprise",
 ]
 
 
@@ -244,8 +172,6 @@ def main():
     excludes = set(bundle.get("exclude", [])) - set(REQUIRED_CHARTS)
     ignores = set(BUNDLE_IGNORE_COMPONENTS)
     components = bundle.get("components", {})
-
-    apply_ugly_hacks(components)
 
     charts = {}
     added = 0
