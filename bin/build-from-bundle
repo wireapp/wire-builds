@@ -68,18 +68,11 @@ S3_BASE_URLS = [
 # S3 helm repo. These get derived automatically from the wire-server
 # component in the bundle.
 WIRE_SERVER_COMPANION_CHARTS = [
-    "cassandra-external",
-    "elasticsearch-external",
-    "fake-aws-sqs",
-    "ingress-nginx-controller",
-    "ldap-scim-bridge",
-    "minio-external",
-    "nginx-ingress-services",
-    "rabbitmq-external",
-    "reaper",
-    "redis-ephemeral",
+    "cassandra-external"
+    "elasticsearch-external"
+    "minio-external"
+    "rabbitmq-external"
 ]
-
 
 def oci_chart_exists(oci_base, name, version):
     """Check whether oci://<host>/<path>/<name>:<version> exists.
