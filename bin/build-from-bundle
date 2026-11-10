@@ -62,6 +62,21 @@ UGLY_HACKS = {
     },
 }
 
+# Charts that wire-release-manager does not manage. They used to live in
+# extra_components.json on the target branch and are inlined here; the optional
+# extra-components.json argument is still merged after them, and never overrides them.
+EXTRA_CHARTS = {
+    "migrate-features": {
+        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+        "version": "0.1.0",
+    },
+    "postgresql-external": {
+        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+        "version": "0.0.44",
+    },
+}
+
+
 
 def apply_ugly_hacks(components):
     """Override the bundle's components in place according to UGLY_HACKS."""
@@ -82,24 +97,6 @@ def apply_ugly_hacks(components):
 # ##########################################################################
 
 
-# Charts that wire-release-manager does not manage. They used to live in
-# extra_components.json on the target branch and are inlined here; the optional
-# extra-components.json argument is still merged after them, and never overrides them.
-EXTRA_CHARTS = {
-    "disallowed-clients": {
-        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-        "version": "0.1.0",
-    },
-    "migrate-features": {
-        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-        "version": "0.1.0",
-    },
-    "postgresql-external": {
-        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-        "version": "0.0.44",
-    },
-}
-
 # Components in the bundle that are not helm charts and should be ignored
 BUNDLE_IGNORE_COMPONENTS = [
     "zauth",
@@ -107,6 +104,7 @@ BUNDLE_IGNORE_COMPONENTS = [
 
 # The exact set of charts that must be present in the final build.json.
 # The script fails if any are missing or if there are extraneous charts.
+
 REQUIRED_CHARTS = [
     "account-pages",
     "cassandra-external",
@@ -129,8 +127,6 @@ REQUIRED_CHARTS = [
     "webapp",
     "wire-server",
     # below here: not required by the bundle, but by test envs 
-    "disallowed-clients",
-    "fake-aws",
     "wire-server-enterprise"
 ]
 
