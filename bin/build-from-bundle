@@ -127,7 +127,8 @@ def find_published_chart(name, version, oci_base=None):
     oci_base is given) the OCI registry at <oci_base>/<name>.
     oci_base is the registry path without the chart name, e.g.
     oci://quay.io/wire/charts/stable (derived from wire-server's repository).
-    Returns the base repo URL. Raises SystemExit if not found anywhere.
+    Returns the repo URL: the S3 base URL, or for OCI the full
+    <oci_base>/<name> chart reference. Raises SystemExit if not found anywhere.
     """
     for base_url in S3_BASE_URLS:
         url = f"{base_url}/{name}-{version}.tgz"
@@ -141,8 +142,9 @@ def find_published_chart(name, version, oci_base=None):
             continue
 
     if oci_base and oci_chart_exists(oci_base, name, version):
-        print(f"  Found {name}-{version} at {oci_base}")
-        return oci_base
+        repo = f"{oci_base}/{name}"
+        print(f"  Found {name}-{version} at {repo}")
+        return repo
 
     print(f"Error: chart {name}-{version} not found in any S3 or OCI repo")
     sys.exit(1)
@@ -186,11 +188,8 @@ def main():
             skipped += 1
             continue
 
-        repo = comp["repository"]
-        if repo.startswith("oci://"):
-            repo = repo.rsplit("/", 1)[0]
         chart = {
-            "repo": repo,
+            "repo": comp["repository"],
             "version": comp["version"],
         }
 
