@@ -2,21 +2,63 @@
   "version": "2026.12.0",
   "helmCharts": {
     "account-pages": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
-      "version": "0.9.0-pre.255"
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "2.11.1-20261030163702.g10029e1",
+      "meta": {
+        "digest": "sha256:7b6a19e9a300221cebcb583954a583d9d533630029354bc2519e15853e2c88d1"
+      }
     },
     "coturn": {
-      "repo": "oci://quay.io/wire/charts/stable",
-      "version": "4.6.2-federation-wireapp.59",
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.6.0-alpha.3",
       "meta": {
-        "digest": "sha256:2ba734d8a0ced366b3d453d4d9d69789cb9c786829b2af8cc1601744bbd63b20"
+        "digest": "sha256:cfe3d472bfb6de30b27afe6901195e84648fdcc31df622ed3019377a6cec45df"
+      }
+    },
+    "fake-aws-sqs": {
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd",
+      "meta": {
+        "digest": "sha256:df0e572d56537b1691de3dd4d73055cfc3233614de63d9435d3f62a94b9d66c1"
+      }
+    },
+    "ingress-nginx-controller": {
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd",
+      "meta": {
+        "digest": "sha256:2f13ae0e7ebf99c87e69743e9dc4b25b459e74e1f55a991a1d57945e3b15f3a4"
+      }
+    },
+    "ldap-scim-bridge": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "5.30.0"
+    },
+    "nginx-ingress-services": {
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd",
+      "meta": {
+        "digest": "sha256:28759dd88d90ba5a692f0d3a487e4c40195100ddd9c6887b2540ca13db64db76"
+      }
+    },
+    "reaper": {
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd",
+      "meta": {
+        "digest": "sha256:46d381b41957e3e530cc4cf11e762239754c802de3a97c60afa1b1ef9b14c1dc"
+      }
+    },
+    "redis-ephemeral": {
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd",
+      "meta": {
+        "digest": "sha256:2c71519daa9e449e7b9b566a53d4135cd9b354364b767174dd565692dfe8e391"
       }
     },
     "sftd": {
-      "repo": "oci://quay.io/wire/charts/stable",
-      "version": "0.147.0",
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.0.99-20261109201828.ga948f64",
       "meta": {
-        "digest": "sha256:ee0224ff515474476ed265d7ceb21b79413e0caf76914656ac60cd99ef7f1a35"
+        "digest": "sha256:e5160454fa7347d6057bd0ce3d27dcc78b3f9ed4e217e23ff263dcda46e5865d"
       }
     },
     "smallstep-accomp": {
@@ -35,73 +77,44 @@
     },
     "team-settings": {
       "repo": "oci://quay.io/wire/charts/dev",
-      "version": "4.24.4-alpha.6",
+      "version": "4.24.4-alpha.6.20261109214717.ga0e069c",
       "meta": {
-        "digest": "sha256:c53b35e538c0c181ee85b895f0d69b3a243ed485d40dec50bc45b2c16847b82b"
+        "digest": "sha256:fb12a2ad0e428f22d888e6a5051e72e6b125644cde28bd9f9b92aedd17f878a7"
       }
     },
     "webapp": {
       "repo": "oci://quay.io/wire/charts/dev",
-      "version": "0.8.0-pre.3710"
+      "version": "0.51.2-20261109205337.g0abb737",
+      "meta": {
+        "digest": "sha256:7e1ad5234d6c1be5f614be05f60169a61e2f51cfa5383ac225db272cb5b22b34"
+      }
     },
     "wire-server": {
-      "repo": "oci://quay.io/wire/charts/stable",
-      "version": "5.36.0",
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd",
       "meta": {
-        "digest": "sha256:d47a2a8966cf0bd7ac98d2bd39a9d0e4ed80295cd94dcb16ad9bda3a40d75f2e"
+        "digest": "sha256:3ec0c398e703a809c0f57a9d71476e2c58e904a28f68cfe9a5d554f46c8dd28f"
       }
     },
     "cassandra-external": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd"
     },
     "elasticsearch-external": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
-    },
-    "fake-aws": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
-    },
-    "fake-aws-sqs": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
-    },
-    "ingress-nginx-controller": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
-    },
-    "ldap-scim-bridge": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd"
     },
     "minio-external": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
-    },
-    "nginx-ingress-services": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd"
     },
     "rabbitmq-external": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
-    },
-    "reaper": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
-    },
-    "redis-ephemeral": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd"
     },
     "wire-server-enterprise": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.36.0"
-    },
-    "disallowed-clients": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "0.1.0"
+      "repo": "oci://quay.io/wire/charts/dev",
+      "version": "5.36.33-20261109205441.g25431dd"
     },
     "migrate-features": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
