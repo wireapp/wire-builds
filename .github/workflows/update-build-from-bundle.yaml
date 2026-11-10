@@ -9,6 +9,11 @@ on:
         description: "Bundle JSON blob"
         required: true
         type: string
+      rm_origin:
+        description: "Pretend the bundle comes from this release manager (prod, staging, local)"
+        required: false
+        type: string
+        default: staging
       dry_run:
         description: "Dry run: skip the origin check and do not commit/push"
         required: false
@@ -31,7 +36,7 @@ jobs:
         env:
           # Which release manager sent the bundle (prod, staging, local).
           # Absent (older senders, manual runs) means prod.
-          RM_ORIGIN: ${{ github.event.client_payload.rm_origin }}
+          RM_ORIGIN: ${{ github.event.client_payload.rm_origin || inputs.rm_origin }}
         run: |
           if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
             BUNDLE='${{ toJSON(github.event.client_payload.bundle) }}'
