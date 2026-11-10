@@ -68,9 +68,9 @@ S3_BASE_URLS = [
 # S3 helm repo. These get derived automatically from the wire-server
 # component in the bundle.
 WIRE_SERVER_COMPANION_CHARTS = [
-    "cassandra-external"
-    "elasticsearch-external"
-    "minio-external"
+    "cassandra-external",
+    "elasticsearch-external",
+    "minio-external",
     "rabbitmq-external"
 ]
 
