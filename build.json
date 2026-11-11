@@ -118,10 +118,11 @@
       }
     },
     "wire-ingress": {
-      "repo": "oci://quay.io/wire/charts/dev/wire-ingress",
-      "version": "5.36.33-20261110142819.gdf09131",
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+      "version": "5.38.20",
       "meta": {
-        "digest": "sha256:a01b0ae3fa8732daf4892b39eac0b32a2b652b4c6ae75b1c6709fb130680b037"
+        "commit": "9e671d0be00fff29f6db82562fd17b6cf8cb8274",
+        "commitURL": "https://github.com/wireapp/wire-server/commit/9e671d0be00fff29f6db82562fd17b6cf8cb8274"
       }
     },
     "wire-server": {
