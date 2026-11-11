@@ -19,6 +19,60 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+# ##########################################################################
+# ##########################################################################
+# ###                                                                    ###
+# ###                          !!!  UGLY HACKS  !!!                      ###
+# ###                                                                    ###
+# ###  DISCLAIMER: everything between the two big banners is a           ###
+# ###  TEMPORARY WORKAROUND. It overrides what the release manager       ###
+# ###  sent with values that are written down by hand here.              ###
+# ###                                                                    ###
+# ###   * It is NOT the source of truth. The bundle is.                  ###
+# ###   * The replacement versions and repositories are NOT verified     ###
+# ###     against the bundle; they may be wrong, outdated or removed.    ###
+# ###   * Each entry silently changes what ends up in build.json.        ###
+# ###   * Do NOT add entries without a reason, an owner and an exit.     ###
+# ###   * DELETE an entry as soon as the release manager carries the     ###
+# ###     real chart location for that component and version.            ###
+# ###                                                                    ###
+# ###  Every applied hack prints an "UGLY HACK:" line in the log.        ###
+# ###                                                                    ###
+# ##########################################################################
+# ##########################################################################
+#
+# chart name -> the complete build.json entry that replaces whatever the
+# bundle produced for that chart (only applied if the chart is present).
+UGLY_HACKS = {
+    "wire-ingress": {
+        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
+        "version": "5.38.20",
+        "meta": {
+            "commit": "9e671d0be00fff29f6db82562fd17b6cf8cb8274",
+            "commitURL": "https://github.com/wireapp/wire-server/commit/9e671d0be00fff29f6db82562fd17b6cf8cb8274",
+        },
+    },
+}
+
+
+def apply_ugly_hacks(charts):
+    """Replace entries of charts in place according to UGLY_HACKS."""
+    for name, entry in UGLY_HACKS.items():
+        if name not in charts:
+            continue
+        old = charts[name]
+        print(
+            f"UGLY HACK: {name} {old.get('version')} ({old.get('repo')}) -> "
+            f"{entry['version']} ({entry['repo']})"
+        )
+        charts[name] = dict(entry)
+
+
+# ##########################################################################
+# ###                      !!!  END OF UGLY HACKS  !!!                   ###
+# ##########################################################################
+
+
 # Charts that wire-release-manager does not manage. They used to live in
 # extra_components.json on the target branch and are inlined here; the optional
 # extra-components.json argument is still merged after them, and never overrides them.
@@ -202,6 +256,8 @@ def main():
 
         charts[name] = chart
         added += 1
+
+    apply_ugly_hacks(charts)
 
     # Derive wire-server companion charts
     if "wire-server" in components:
