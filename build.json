@@ -8,11 +8,25 @@
         "digest": "sha256:7b6a19e9a300221cebcb583954a583d9d533630029354bc2519e15853e2c88d1"
       }
     },
+    "cassandra-external": {
+      "repo": "oci://quay.io/wire/charts/dev/cassandra-external",
+      "version": "5.36.33-20261110142819.gdf09131",
+      "meta": {
+        "digest": "sha256:272d528cd2d19bf9aa1d12c14141f7afc66b6e3f4eaec58f2ffaa8d48ac63776"
+      }
+    },
     "coturn": {
       "repo": "oci://quay.io/wire/charts/dev/coturn",
-      "version": "5.6.0-alpha.3.20261111081216.gdd06cdd",
+      "version": "5.6.0-alpha.3.20261111081318.gbd270f7",
       "meta": {
-        "digest": "sha256:d31923651d25b31b5521ea7206df79653285d1b729ebd598cc4beea4453a5369"
+        "digest": "sha256:80ca955058c9259d1e00a261b0dc353900fdfe593b8e0b2d7e0380f68e84a291"
+      }
+    },
+    "elasticsearch-external": {
+      "repo": "oci://quay.io/wire/charts/dev/elasticsearch-external",
+      "version": "5.36.33-20261110142819.gdf09131",
+      "meta": {
+        "digest": "sha256:91da9cb150823c10ae749b062ddcde78af457ee46c4a2a2e0c6e9f5d40aafa51"
       }
     },
     "fake-aws-sqs": {
@@ -33,11 +47,25 @@
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
       "version": "5.30.0"
     },
+    "minio-external": {
+      "repo": "oci://quay.io/wire/charts/dev/minio-external",
+      "version": "5.36.33-20261110142819.gdf09131",
+      "meta": {
+        "digest": "sha256:dde8ad46a1fce6c6ca5397c32c2321defb0d375ed46d7234fac4e1b09270ae97"
+      }
+    },
     "nginx-ingress-services": {
       "repo": "oci://quay.io/wire/charts/dev/nginx-ingress-services",
       "version": "5.36.33-20261110142819.gdf09131",
       "meta": {
         "digest": "sha256:f735e9a7e0761a834a36455b3f1dff3218bdf2423062dcc36492a920eddce4e5"
+      }
+    },
+    "rabbitmq-external": {
+      "repo": "oci://quay.io/wire/charts/dev/rabbitmq-external",
+      "version": "5.36.33-20261110142819.gdf09131",
+      "meta": {
+        "digest": "sha256:3ed3757f0420698f8467947260e1931053ebf1678f0cf5686e458783f36ef10c"
       }
     },
     "reaper": {
@@ -89,28 +117,19 @@
         "digest": "sha256:7e1ad5234d6c1be5f614be05f60169a61e2f51cfa5383ac225db272cb5b22b34"
       }
     },
+    "wire-ingress": {
+      "repo": "oci://quay.io/wire/charts/dev/wire-ingress",
+      "version": "5.36.33-20261110142819.gdf09131",
+      "meta": {
+        "digest": "sha256:a01b0ae3fa8732daf4892b39eac0b32a2b652b4c6ae75b1c6709fb130680b037"
+      }
+    },
     "wire-server": {
       "repo": "oci://quay.io/wire/charts/dev/wire-server",
       "version": "5.36.33-20261110142819.gdf09131",
       "meta": {
         "digest": "sha256:73651352d556ff495ba64fc1cebfddeefc8cb66d0093fb4c57cd5d798740ccf4"
       }
-    },
-    "cassandra-external": {
-      "repo": "oci://quay.io/wire/charts/dev/cassandra-external",
-      "version": "5.36.33-20261110142819.gdf09131"
-    },
-    "elasticsearch-external": {
-      "repo": "oci://quay.io/wire/charts/dev/elasticsearch-external",
-      "version": "5.36.33-20261110142819.gdf09131"
-    },
-    "minio-external": {
-      "repo": "oci://quay.io/wire/charts/dev/minio-external",
-      "version": "5.36.33-20261110142819.gdf09131"
-    },
-    "rabbitmq-external": {
-      "repo": "oci://quay.io/wire/charts/dev/rabbitmq-external",
-      "version": "5.36.33-20261110142819.gdf09131"
     },
     "migrate-features": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
