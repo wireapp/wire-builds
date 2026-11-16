@@ -76,12 +76,7 @@ def apply_ugly_hacks(charts):
 # Charts that wire-release-manager does not manage. They used to live in
 # extra_components.json on the target branch and are inlined here; the optional
 # extra-components.json argument is still merged after them, and never overrides them.
-EXTRA_CHARTS = {
-    "migrate-features": {
-        "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-        "version": "0.1.0",
-    }
-}
+EXTRA_CHARTS = {}
 
 # Components in the bundle that are not helm charts and should be ignored
 BUNDLE_IGNORE_COMPONENTS = [
