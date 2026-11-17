@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-zulu.6030",
+  "version": "1.0.0-zulu.6031",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -29,10 +29,11 @@
     },
     "sftd": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-avs",
-      "version": "0.154.0",
+      "version": "5.2.0-alpha.2",
       "meta": {
-        "appVersion": "5.0.100",
-        "commit": "633af34"
+        "appVersion": "5.2.0-alpha.2",
+        "commitURL": "https://github.com/wireapp/wire-avs-service/commit/f4b16016039d5ed5ef05c186cfa8d157e8995d6b",
+        "commit": "f4b16016039d5ed5ef05c186cfa8d157e8995d6b"
       }
     },
     "aws-ingress": {
