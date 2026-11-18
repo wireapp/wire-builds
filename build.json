@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-zulu.6044",
+  "version": "1.0.0-zulu.6045",
   "helmCharts": {
     "wire-server": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
@@ -70,11 +70,11 @@
     },
     "coturn": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.6.0-alpha.5",
+      "version": "5.6.0-alpha.6",
       "meta": {
-        "appVersion": "5.6.0-alpha.5",
-        "commitURL": "https://github.com/wireapp/coturn/commit/795432570fb88db764396724feeb583869e379ce",
-        "commit": "795432570fb88db764396724feeb583869e379ce"
+        "appVersion": "5.6.0-alpha.6",
+        "commitURL": "https://github.com/wireapp/coturn/commit/a38e8cfac2ab77c3c38ccef8d2be3bc8b4a29027",
+        "commit": "a38e8cfac2ab77c3c38ccef8d2be3bc8b4a29027"
       }
     },
     "databases-ephemeral": {
