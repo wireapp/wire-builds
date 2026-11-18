@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-173",
+  "version": "1.0.0-174",
   "helmCharts": {
     "account-pages": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-webapp",
@@ -12,10 +12,11 @@
     },
     "sftd": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-avs",
-      "version": "0.145.0",
+      "version": "5.2.0",
       "meta": {
-        "appVersion": "5.0.80",
-        "commit": "1e387a3"
+        "appVersion": "5.2.0",
+        "commitURL": "https://github.com/wireapp/wire-avs-service/commit/1595016c7d7aa5fbbaa791f626c0a3fea7861b2b",
+        "commit": "1595016c7d7aa5fbbaa791f626c0a3fea7861b2b"
       }
     },
     "wire-server": {
