@@ -187,11 +187,11 @@
       }
     },
     "ingress-nginx-controller": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.32.0-pre-q2.4",
+      "repo": "oci://quay.io/wire/charts/stable/ingress-nginx-controller",
+      "version": "6.1.0",
       "meta": {
-        "commit": "c8d7561c247a664fcccd036415b329ac8ec38a21",
-        "commitURL": "https://github.com/wireapp/wire-server-security-hotfix/commit/c8d7561c247a664fcccd036415b329ac8ec38a21"
+        "commit": "f17a821ce6e1f1babfbed5a7bd3d31af0b1f87cf",
+        "commitURL": "https://github.com/wireapp/helm-charts/commit/f17a821ce6e1f1babfbed5a7bd3d31af0b1f87cf"
       }
     },
     "nginx-ingress-services": {
