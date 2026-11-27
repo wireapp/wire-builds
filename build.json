@@ -8,85 +8,67 @@
         "digest": "sha256:7b6a19e9a300221cebcb583954a583d9d533630029354bc2519e15853e2c88d1"
       }
     },
-    "cassandra-external": {
-      "repo": "oci://quay.io/wire/charts/dev/cassandra-external",
-      "version": "5.36.33-20261110142819.gdf09131",
-      "meta": {
-        "digest": "sha256:272d528cd2d19bf9aa1d12c14141f7afc66b6e3f4eaec58f2ffaa8d48ac63776"
-      }
-    },
     "coturn": {
-      "repo": "oci://quay.io/wire/charts/dev/coturn",
-      "version": "5.6.0-alpha.3.20261111081318.gbd270f7",
+      "repo": "oci://quay.io/wire/charts/stable/coturn",
+      "version": "5.6.0",
       "meta": {
-        "digest": "sha256:80ca955058c9259d1e00a261b0dc353900fdfe593b8e0b2d7e0380f68e84a291"
-      }
-    },
-    "elasticsearch-external": {
-      "repo": "oci://quay.io/wire/charts/dev/elasticsearch-external",
-      "version": "5.36.33-20261110142819.gdf09131",
-      "meta": {
-        "digest": "sha256:91da9cb150823c10ae749b062ddcde78af457ee46c4a2a2e0c6e9f5d40aafa51"
+        "digest": "sha256:10077dae33e48ee6fa6aaba2896420a2239a5127c7b2c77375540cb9e7c5a51e"
       }
     },
     "fake-aws-sqs": {
-      "repo": "oci://quay.io/wire/charts/dev/fake-aws-sqs",
-      "version": "5.36.33-20261110142819.gdf09131",
+      "repo": "oci://quay.io/wire/charts/stable/fake-aws-sqs",
+      "version": "5.39.0",
       "meta": {
-        "digest": "sha256:0cb92baef8cf55e650f46970061111ae266fd5a15ac068401f81074acc5a40bb"
+        "digest": "sha256:bfe2d2974c26b37b37e8f6530aa18bfb658320e8516a77bc965b098c5c2e10ad"
       }
     },
     "ingress-nginx-controller": {
-      "repo": "oci://quay.io/wire/charts/dev/ingress-nginx-controller",
-      "version": "5.36.33-20261110142819.gdf09131",
+      "repo": "oci://quay.io/wire/charts/stable/ingress-nginx-controller",
+      "version": "6.1.0",
       "meta": {
-        "digest": "sha256:82fe673f2ad1f17dc04ab33a0fd5a05cc2e8e9604ca41d383a92e75d15b585cf"
+        "digest": "sha256:ea2e720fbd558ced4d71635a8c25785143e00a37ce2b20ed3dd8098eef16f651"
       }
     },
     "ldap-scim-bridge": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "5.30.0"
-    },
-    "minio-external": {
-      "repo": "oci://quay.io/wire/charts/dev/minio-external",
-      "version": "5.36.33-20261110142819.gdf09131",
+      "repo": "oci://quay.io/wire/charts/stable/ldap-scim-bridge",
+      "version": "6.0.0",
       "meta": {
-        "digest": "sha256:dde8ad46a1fce6c6ca5397c32c2321defb0d375ed46d7234fac4e1b09270ae97"
+        "digest": "sha256:6f68d3627beef9d86d4d9fb94bd81ccab5c25078fa1462b4b6af8af96c72bd9a"
+      }
+    },
+    "migrate-features": {
+      "repo": "oci://quay.io/wire/charts/stable/migrate-features",
+      "version": "6.0.0",
+      "meta": {
+        "digest": "sha256:6b52a34e08c13fe3487dbd8f3d7ce3efb097d9e95f972e599daf0adc3d77c7cb"
       }
     },
     "nginx-ingress-services": {
-      "repo": "oci://quay.io/wire/charts/dev/nginx-ingress-services",
-      "version": "5.36.33-20261110142819.gdf09131",
+      "repo": "oci://quay.io/wire/charts/stable/nginx-ingress-services",
+      "version": "5.39.0",
       "meta": {
-        "digest": "sha256:f735e9a7e0761a834a36455b3f1dff3218bdf2423062dcc36492a920eddce4e5"
-      }
-    },
-    "rabbitmq-external": {
-      "repo": "oci://quay.io/wire/charts/dev/rabbitmq-external",
-      "version": "5.36.33-20261110142819.gdf09131",
-      "meta": {
-        "digest": "sha256:3ed3757f0420698f8467947260e1931053ebf1678f0cf5686e458783f36ef10c"
+        "digest": "sha256:c815ab342cf1ac0ce5165d4c98da1385f1e1b46c0e95727eaa59da4ef1f60a80"
       }
     },
     "reaper": {
-      "repo": "oci://quay.io/wire/charts/dev/reaper",
-      "version": "5.36.33-20261110142819.gdf09131",
+      "repo": "oci://quay.io/wire/charts/stable/reaper",
+      "version": "5.39.0",
       "meta": {
-        "digest": "sha256:f37684ee9de209415f94b1a96054035efcc4bb55e745fe77d19aff781b01a8a3"
+        "digest": "sha256:5ce1e15f3d2fb81db63ecc9d24f8571d0f17bf3061cc8b629a161b5dec5e5305"
       }
     },
     "redis-ephemeral": {
-      "repo": "oci://quay.io/wire/charts/dev/redis-ephemeral",
-      "version": "5.36.33-20261110142819.gdf09131",
+      "repo": "oci://quay.io/wire/charts/stable/redis-ephemeral",
+      "version": "5.39.0",
       "meta": {
-        "digest": "sha256:4ac473a0404e503ca6dd99192e53b4eac76fe69a11a50c900139dce9b8546f8f"
+        "digest": "sha256:b74be0ec07e35b249e91fb4f9af5e61370944b2d7a3996caaeadd23e820886a3"
       }
     },
     "sftd": {
-      "repo": "oci://quay.io/wire/charts/dev/sftd",
-      "version": "5.0.99-20261109201828.ga948f64",
+      "repo": "oci://quay.io/wire/charts/stable/sftd",
+      "version": "5.2.0",
       "meta": {
-        "digest": "sha256:e5160454fa7347d6057bd0ce3d27dcc78b3f9ed4e217e23ff263dcda46e5865d"
+        "digest": "sha256:0964e2e2c3213f54c9adbaf4730c5eca598313b03c2dd1cf6382a10a8c631782"
       }
     },
     "smallstep-accomp": {
@@ -98,43 +80,54 @@
     },
     "step-certificates": {
       "repo": "oci://quay.io/wire/charts/stable/step-certificates",
-      "version": "1.29.4",
+      "version": "1.30.1",
       "meta": {
-        "digest": "sha256:c57f7b6adad01ffcd0faedb6f68fffd7dab294350c0a25360c0018ebf46b6c90"
+        "digest": "sha256:e1383b455da79ed37aab8f6616fa9e14efd63942d28713a3359acc735edc767d"
       }
     },
     "team-settings": {
       "repo": "oci://quay.io/wire/charts/dev/team-settings",
-      "version": "4.24.4-alpha.6.20261109214717.ga0e069c",
+      "version": "4.24.4-alpha.6.20261120141311.gb1a8621",
       "meta": {
-        "digest": "sha256:fb12a2ad0e428f22d888e6a5051e72e6b125644cde28bd9f9b92aedd17f878a7"
+        "digest": "sha256:d06b1ab99b4f1c70831cadd22fd2b5ae36a0644b7a0d278f6c4e6389e5d369d9"
       }
     },
     "webapp": {
-      "repo": "oci://quay.io/wire/charts/dev/wire-webapp",
-      "version": "0.51.2-20261109205337.g0abb737",
+      "repo": "oci://quay.io/wire/charts/stable/wire-webapp",
+      "version": "0.8.0-pre.3713",
       "meta": {
-        "digest": "sha256:7e1ad5234d6c1be5f614be05f60169a61e2f51cfa5383ac225db272cb5b22b34"
+        "digest": "sha256:15ebf9193b329a01c0fff24d1d43e00c35db3ec50a3e12b0016f9f18d5460be6"
       }
     },
     "wire-ingress": {
-      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts-develop",
-      "version": "5.38.20",
+      "repo": "oci://quay.io/wire/charts/stable/wire-ingress",
+      "version": "5.39.0",
       "meta": {
-        "commit": "9e671d0be00fff29f6db82562fd17b6cf8cb8274",
-        "commitURL": "https://github.com/wireapp/wire-server/commit/9e671d0be00fff29f6db82562fd17b6cf8cb8274"
+        "digest": "sha256:7523e440c1f851073acbdae482afd9044b3ba658f1d53d6c2fdc9f2b6afc5867"
       }
     },
     "wire-server": {
-      "repo": "oci://quay.io/wire/charts/dev/wire-server",
-      "version": "5.36.33-20261110142819.gdf09131",
+      "repo": "oci://quay.io/wire/charts/stable/wire-server",
+      "version": "5.39.0",
       "meta": {
-        "digest": "sha256:73651352d556ff495ba64fc1cebfddeefc8cb66d0093fb4c57cd5d798740ccf4"
+        "digest": "sha256:3daf6de8ab183ab1a07cfa645fc345bc114ae66b293d56cbe401cea98b18c11b"
       }
     },
-    "migrate-features": {
+    "cassandra-external": {
       "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
-      "version": "0.1.0"
+      "version": "5.39.0"
+    },
+    "elasticsearch-external": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "5.39.0"
+    },
+    "minio-external": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "5.39.0"
+    },
+    "rabbitmq-external": {
+      "repo": "https://s3-eu-west-1.amazonaws.com/public.wire.com/charts",
+      "version": "5.39.0"
     }
   }
 }
