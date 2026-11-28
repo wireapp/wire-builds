@@ -1,11 +1,11 @@
 {
-  "version": "1.0.0-zulu.6155",
+  "version": "1.0.0-zulu.6156",
   "helmCharts": {
     "wire-server": {
       "repo": "oci://quay.io/wire/charts/dev/wire-server",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:018c2d8c45b559070cdfc0ff3e4d8600732bcdb6d2ac9d1cd6feb141ce0ac4c6"
+        "digest": "sha256:79d02f9138c744f1595e75391ec08179f53a1f2c001e8b6a0dd6a4f431f08c64"
       }
     },
     "webapp": {
@@ -61,9 +61,9 @@
     },
     "cassandra-external": {
       "repo": "oci://quay.io/wire/charts/dev/cassandra-external",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:b3e6ed1fe78df7900a4c56a2afda7a4a49cab55de91ebe2f26306286dd72882a"
+        "digest": "sha256:1dc9a744f12384ed02ed92e8a1273c84f7480de37dc04de2b8dfa63568750b28"
       }
     },
     "coturn": {
@@ -109,9 +109,9 @@
     },
     "elasticsearch-external": {
       "repo": "oci://quay.io/wire/charts/dev/elasticsearch-external",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:fc8efb869e7b86fcd7120996d27b35e6660878243b58310ed7d20496145f14dc"
+        "digest": "sha256:6c85a8a5ac98e653a09cf42e6923b692b708f4c230aadd012a01aae52cf64e08"
       }
     },
     "fake-aws": {
@@ -132,9 +132,9 @@
     },
     "fake-aws-sqs": {
       "repo": "oci://quay.io/wire/charts/dev/fake-aws-sqs",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:8a2a12889599f9816a7ca863006af90129fc9ff6aae2f605c0ed4a59ff2b2a3e"
+        "digest": "sha256:cddeca8099256dd8ad84d488b095acdd2a17230ed5d17d96653884e7f96951aa"
       }
     },
     "fluent-bit": {
@@ -179,9 +179,9 @@
     },
     "minio-external": {
       "repo": "oci://quay.io/wire/charts/dev/minio-external",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:51075111d3b2f81e6b0309242f20ce5905b499a29e093444189450ca7c065ff5"
+        "digest": "sha256:f666f14fe03b17545ddebf1cde1fb686542a6dd1a711928b3d90f231f7569a42"
       }
     },
     "nginx-ingress-controller": {
@@ -194,9 +194,9 @@
     },
     "nginx-ingress-services": {
       "repo": "oci://quay.io/wire/charts/dev/nginx-ingress-services",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:85b02a670f0c9534a8c71509faf28a879fd8d4d489bd07b4d163c203186d0fff"
+        "digest": "sha256:16280855ac2645c0c5f51900eef207d6090c46fb770c40baa3151ffc5c868c4a"
       }
     },
     "postgresql": {
@@ -209,30 +209,30 @@
     },
     "rabbitmq": {
       "repo": "oci://quay.io/wire/charts/dev/rabbitmq",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:dd2f4a5aec2d7ed39462902bcee8534b572528630c5ca5451d8c9f3a9af534d5"
+        "digest": "sha256:d9d3cfb4ed2342ec4a868bda58224e0b404401958588a8b1a11aad675d41b3a7"
       }
     },
     "rabbitmq-external": {
       "repo": "oci://quay.io/wire/charts/dev/rabbitmq-external",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:03d58ca10c4673ef659d8fcfbf2f4de93ee2b4b30421bb031e56c9491f7bdb76"
+        "digest": "sha256:2eb46b2cf4e3b07695f73f8329460a62ad06ae76daa4fcb290b2f79869b9376e"
       }
     },
     "reaper": {
       "repo": "oci://quay.io/wire/charts/dev/reaper",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:b48fff8e458a069f492ca667b50f441a671d636cfdcce3a0975b5624d308640c"
+        "digest": "sha256:d8e64d75f15c2caf5f9549433db52dbd72f00ad85581e8a13184cbb1d3977b4a"
       }
     },
     "redis-ephemeral": {
       "repo": "oci://quay.io/wire/charts/dev/redis-ephemeral",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:b5f78f2848bbadbbdcbbf8a4bdd72063f8f71d741ff4ec57a01f6683a0abd198"
+        "digest": "sha256:59ca7f299531374e45b6f5662abff133004df470a4a99f7c00a2190416c8566f"
       }
     },
     "restund": {
@@ -302,9 +302,9 @@
     },
     "wire-server-enterprise": {
       "repo": "oci://quay.io/wire/charts/dev/wire-server-enterprise",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:38ca32e629253075c0bdb1de6a1b48993d13651fdd6751fd094a50d716559c18"
+        "digest": "sha256:df4703555a4a548fe8322fcebb8d4e477642958dd47dbca37255768e26f5749c"
       }
     },
     "disallowed-clients": {
@@ -398,9 +398,9 @@
     },
     "wire-ingress": {
       "repo": "oci://quay.io/wire/charts/dev/wire-ingress",
-      "version": "5.39.1-alpha.1.20261127114646.g26d2257",
+      "version": "5.39.1-alpha.1.20261128132311.g2f01a05",
       "meta": {
-        "digest": "sha256:3ecb1ac088ac54f31780034fb69d42b7a564235548161c92dbf4ce1cbc64e3f5"
+        "digest": "sha256:c9ab25ba2e268cd8cdb335f48a0a2e73c4ac749b033ff598c46fb189a7ccbe42"
       }
     }
   }
